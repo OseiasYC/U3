@@ -18,6 +18,8 @@ public class Course{
     @Column(length = 3)
     private String id;
 
+    private String name;
+
     private List<String> studentsRm;
 
     @ManyToMany
