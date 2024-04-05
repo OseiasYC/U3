@@ -19,6 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Request {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
