@@ -32,11 +32,11 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book updateBook(Long id, Book bookDetails) {
+    public Book updateBook(Long id, Book updateBook) {
         Book book = getBookById(id);
-        book.setTitle(bookDetails.getTitle());
-        book.setAuthor(bookDetails.getAuthor());
-        book.setAmount(bookDetails.getAmount());
+        book.setTitle(updateBook.getTitle());
+        book.setAuthor(updateBook.getAuthor());
+        book.setAmount(updateBook.getAmount());
         return bookRepository.save(book);
     }
 

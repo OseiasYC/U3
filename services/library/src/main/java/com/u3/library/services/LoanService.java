@@ -12,7 +12,7 @@ public class LoanService {
     private final LoanRepository loanRepository;
 
     @Autowired
-    public LoanService(LoanRepository loanRepository, BookService bookService) {
+    public LoanService(LoanRepository loanRepository) {
         this.loanRepository = loanRepository;
     }
 
@@ -28,13 +28,13 @@ public class LoanService {
         return loanRepository.save(loan);
     }
 
-    public Loan updateLoan(Long id, Loan loanDetails) {
+    public Loan updateLoan(Long id, Loan updateLoan) {
       Loan loan = getLoanById(id);
-      loan.setStudentRm(loanDetails.getStudentRm());
-      loan.setBookId(loanDetails.getBookId());
-      loan.setLoanStatus(loanDetails.getLoanStatus());
-      loan.setLoanDate(loanDetails.getLoanDate());
-      loan.setReturnDate(loanDetails.getReturnDate());
+      loan.setStudentRm(updateLoan.getStudentRm());
+      loan.setBookId(updateLoan.getBookId());
+      loan.setLoanStatus(updateLoan.getLoanStatus());
+      loan.setLoanDate(updateLoan.getLoanDate());
+      loan.setReturnDate(updateLoan.getReturnDate());
       return loanRepository.save(loan);
   }
       public Loan returnLoan(Long id) {

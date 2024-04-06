@@ -18,36 +18,32 @@ import com.u3.library.services.LoanService;
 @RequestMapping("/loans")
 public class LoanController {
 
-    private final LoanService loanService;
-
     @Autowired
-    public LoanController(LoanService loanService) {
-        this.loanService = loanService;
+    LoanService loanService;
+
+    @PostMapping("/save")
+    public Loan createBook(@RequestBody Loan loan) {
+        return loanService.createLoan(loan);
     }
 
-    @GetMapping
+    @PutMapping("/{update}")
+    public Loan updateLoan(@PathVariable Long id, @RequestBody Loan loanDetails) {
+        return loanService.updateLoan(id, loanDetails);
+    }
+
+    @GetMapping("/findAll")
     public List<Loan> getAllLoans() {
         return loanService.getAllLoans();
     }
 
-  @GetMapping("/{id}")
-  public Loan getLoanById(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public Loan getLoanById(@PathVariable Long id) {
       return loanService.getLoanById(id);
-  }
-
-  @PostMapping
-    public Loan createBook(@RequestBody Loan loan) {
-        return loanService.createLoan(loan);
     }
-    
-    @PutMapping("/{id}")
-      public Loan updateLoan(@PathVariable Long id, @RequestBody Loan loanDetails) {
-          return loanService.updateLoan(id, loanDetails);
-      }
-  
-      @DeleteMapping("/{id}")
-      public void delete(@PathVariable Long id) {
-          loanService.deleteLoan(id);
+
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable Long id) {
+    loanService.deleteLoan(id);
       }
 
   }
