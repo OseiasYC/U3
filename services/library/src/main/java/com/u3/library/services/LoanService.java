@@ -4,19 +4,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.u3.library.models.Book;
 import com.u3.library.models.Loan;
 import com.u3.library.repositories.LoanRepository;
 
 @Service
 public class LoanService {
     private final LoanRepository loanRepository;
-    private final BookService bookService;
 
     @Autowired
     public LoanService(LoanRepository loanRepository, BookService bookService) {
         this.loanRepository = loanRepository;
-        this.bookService = bookService;
     }
 
     public List<Loan> getAllLoans() {
