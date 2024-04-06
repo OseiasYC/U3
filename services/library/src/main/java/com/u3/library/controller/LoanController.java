@@ -26,9 +26,9 @@ public class LoanController {
         return loanService.createLoan(loan);
     }
 
-    @PutMapping("/update")
-    public Loan updateLoan(@PathVariable Long id, @RequestBody Loan loanDetails) {
-        return loanService.updateLoan(id, loanDetails);
+    @PutMapping("/update/{id}")
+    public Loan updateLoan(@PathVariable Long id, @RequestBody Loan updateloan) {
+        return loanService.updateLoan(id, updateloan);
     }
 
     @GetMapping("/findAll")
