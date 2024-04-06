@@ -26,22 +26,11 @@ public class BookService {
     public Book createBook(Book book) {
         return bookRepository.save(book);
     }
-    public Book borrowBook(Long id) {
-      Book book = getBookById(id);
-      if (book.getQuantity() > 0) {
-          book.setQuantity(book.getQuantity() - 1);
-          return bookRepository.save(book);
-      } else {
-          throw new RuntimeException("Book is not available for borrowing");
-      }
-  }
 
-  public Book returnBook(Long id) {
-      Book book = getBookById(id);
-      book.setQuantity(book.getQuantity() + 1);
-      return bookRepository.save(book);
-  }
-
+    public Book returnBook(Long id) {
+        Book book = getBookById(id);
+        return bookRepository.save(book);
+    }
 
     public Book updateBook(Long id, Book bookDetails) {
         Book book = getBookById(id);
@@ -55,5 +44,4 @@ public class BookService {
         Book book = getBookById(id);
         bookRepository.delete(book);
     }
-  }
-  
+}
