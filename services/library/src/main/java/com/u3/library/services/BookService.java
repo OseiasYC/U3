@@ -36,7 +36,7 @@ public class BookService {
         Book book = getBookById(id);
         book.setTitle(bookDetails.getTitle());
         book.setAuthor(bookDetails.getAuthor());
-        book.setQuantity(bookDetails.getQuantity());
+        book.setAmount(bookDetails.getAmount());
         return bookRepository.save(book);
     }
 
