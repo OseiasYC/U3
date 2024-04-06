@@ -5,9 +5,9 @@ VALUES
 ('0987654321', 2, 'OVERDUE', '2024-03-28 15:45:00', '2024-04-07 15:45:00');
 
 -- Books:
-INSERT INTO book (title, author, amount,quantity) 
+INSERT INTO book (title, author, amount) 
 VALUES 
-('The Great Gatsby', 'F. Scott Fitzgerald', 5,1),
-('To Kill a Mockingbird', 'Harper Lee', 3,5),
-('1984', 'George Orwell', 7,4);
+('The Great Gatsby', 'F. Scott Fitzgerald', 5),
+('To Kill a Mockingbird', 'Harper Lee', 3),
+('1984', 'George Orwell', 7);
 

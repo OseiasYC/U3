@@ -16,21 +16,14 @@ import com.u3.library.services.BookService;
 @RestController
 @RequestMapping("/books")
 public class BookController {
+    private final BookService bookService;
 
     @Autowired
-    BookService bookService;
-    
-    @PostMapping("/save")
-    public Book createBook(@RequestBody Book book) {
-        return bookService.createBook(book);
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    @PutMapping("/update")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
-        return bookService.updateBook(id, bookDetails);
-    }
-
-    @GetMapping("/findAll")
+    @GetMapping
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
@@ -40,9 +33,18 @@ public class BookController {
         return bookService.getBookById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PostMapping
+    public Book createBook(@RequestBody Book book) {
+        return bookService.createBook(book);
+    }
+
+    @PutMapping("/{id}")
+    public Book updateBook(@PathVariable Long id, @RequestBody Book bookDetails) {
+        return bookService.updateBook(id, bookDetails);
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }
 }
-
