@@ -102,7 +102,7 @@ def main():
     if connection:
         courses = get_courses(connection)
         if courses:
-            insert_students(connection, courses, 10000)
+            insert_students(connection, courses, 20000)
         connection.close()
 
 if __name__ == "__main__":
