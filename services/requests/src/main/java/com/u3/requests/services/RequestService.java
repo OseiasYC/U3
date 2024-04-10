@@ -1,13 +1,11 @@
 package com.u3.requests.services;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.u3.requests.dto.RequestDTO;
+import com.u3.requests.enums.RequestStatus;
 import com.u3.requests.interfaces.RequestRepository;
 import com.u3.requests.models.Request;
 
@@ -17,49 +15,33 @@ public class RequestService {
     @Autowired
     RequestRepository requestRepository;
 
-    public List<RequestDTO> getAllRequests() {
-        List<Request> requests = requestRepository.findAll();
-        return requests.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public void createRequest(Request request) {
+        requestRepository.save(request);
     }
 
-    public RequestDTO getRequestById(Long id) {
-        Optional<Request> requestOptional = requestRepository.findById(id);
-        if (requestOptional.isPresent()) {
-            return convertToDTO(requestOptional.get());
-        } else {
-            throw new RuntimeException("Request not found with id: " + id);
-        }
+    public void updateRequest(Request request) {
+        requestRepository.save(request);
     }
 
-    public RequestDTO saveRequest(RequestDTO requestDTO) {
-        Request request = convertToEntity(requestDTO);
-        Request savedRequest = requestRepository.save(request);
-        return convertToDTO(savedRequest);
+    public void deleteRequest(Long requestId) {
+        requestRepository.deleteById(requestId);
     }
 
-    private RequestDTO convertToDTO(Request request) {
-        return new RequestDTO(
-                request.getId(),
-                request.getStudentRm(),
-                request.getTitle(),
-                request.getDescription(),
-                null, //FIXME
-                request.getRequestDate(),
-                request.getStatus());
+    public Request getRequest(Long requestId) {
+        return requestRepository.findById(requestId)
+                .orElseThrow(() -> new RuntimeException("Request not found with ID: " + requestId));
     }
 
-    private Request convertToEntity(RequestDTO requestDTO) {
-        Request request = new Request();
-        request.setId(requestDTO.id());
-        request.setStudentRm(requestDTO.studentRm());
-        request.setTitle(requestDTO.title());
-        request.setDescription(requestDTO.description());
-        // FIXME: request.setAttachment(requestDTO.attachment());
-        request.setRequestDate(requestDTO.requestDate());
-        request.setStatus(requestDTO.status());
-        return request;
+    public List<Request> getAllRequests() {
+        return requestRepository.findAll();
+    }
+
+    public List<Request> getRequestsByStudentRm(String studentRm) {
+        return requestRepository.findByStudentRm(studentRm);
+    }
+
+    public List<Request> getRequestsByStatus(RequestStatus status) {
+        return requestRepository.findByStatus(status);
     }
 
 }
