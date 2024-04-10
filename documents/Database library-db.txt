@@ -1,0 +1,46 @@
+-- Database: library-db --
+
+-- Tabelas --
+
+----
+
+-- Table: public.book
+
+-- DROP TABLE IF EXISTS public.book;
+
+CREATE TABLE IF NOT EXISTS public.book
+(
+    amount integer NOT NULL,
+    id bigint NOT NULL DEFAULT nextval('book_id_seq'::regclass),
+    author character varying(255) COLLATE pg_catalog."default",
+    title character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT book_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.book
+    OWNER to postgres;
+
+----
+
+-- Table: public.loan
+
+-- DROP TABLE IF EXISTS public.loan;
+
+CREATE TABLE IF NOT EXISTS public.loan
+(
+    book_id bigint,
+    id bigint NOT NULL DEFAULT nextval('loan_id_seq'::regclass),
+    loan_date timestamp(6) without time zone,
+    return_date timestamp(6) without time zone,
+    loan_status character varying(255) COLLATE pg_catalog."default",
+    student_rm character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT loan_pkey PRIMARY KEY (id),
+    CONSTRAINT loan_loan_status_check CHECK (loan_status::text = ANY (ARRAY['BORROWED'::character varying, 'RETURNED'::character varying, 'OVERDUE'::character varying, 'LOST'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.loan
+    OWNER to postgres;

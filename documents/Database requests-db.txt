@@ -1,0 +1,23 @@
+-- Database: library-db --
+
+-- Table: public.request
+
+-- DROP TABLE IF EXISTS public.request;
+
+CREATE TABLE IF NOT EXISTS public.request
+(
+    id bigint NOT NULL DEFAULT nextval('request_id_seq'::regclass),
+    request_date timestamp(6) without time zone,
+    description text COLLATE pg_catalog."default",
+    status character varying(255) COLLATE pg_catalog."default",
+    student_rm character varying(255) COLLATE pg_catalog."default",
+    title character varying(255) COLLATE pg_catalog."default",
+    attachment oid,
+    CONSTRAINT request_pkey PRIMARY KEY (id),
+    CONSTRAINT request_status_check CHECK (status::text = ANY (ARRAY['OPEN'::character varying, 'CONCLUDED'::character varying, 'CANCELED'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.request
+    OWNER to postgres;

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-RequestsApplication<requests>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.u3.requests.RequestsApplication",
+            "projectName": "requests",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
