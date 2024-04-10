@@ -1,0 +1,54 @@
+-- Database: grades-db --
+
+-- Tabelas --
+
+----
+
+-- Table: public.student_subject_grades
+
+-- DROP TABLE IF EXISTS public.student_subject_grades;
+
+CREATE TABLE IF NOT EXISTS public.student_subject_grades
+(
+    abscences integer NOT NULL,
+    subject_entry_date date,
+    total_subject_workload integer NOT NULL,
+    id bigint NOT NULL DEFAULT nextval('student_subject_grades_id_seq'::regclass),
+    student_summary_id bigint,
+    course_id character varying(255) COLLATE pg_catalog."default",
+    situation character varying(255) COLLATE pg_catalog."default",
+    grades double precision[],
+    CONSTRAINT student_subject_grades_pkey PRIMARY KEY (id),
+    CONSTRAINT fka4pbd2rx799tjf2d98sdcf30k FOREIGN KEY (student_summary_id)
+        REFERENCES public.student_summary (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT student_subject_grades_situation_check CHECK (situation::text = ANY (ARRAY['PENDING'::character varying, 'CURSING'::character varying, 'CONCLUDED'::character varying, 'DISAPPROVED'::character varying, 'STOPPED'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.student_subject_grades
+    OWNER to postgres;
+
+----
+
+-- Table: public.student_summary
+
+-- DROP TABLE IF EXISTS public.student_summary;
+
+CREATE TABLE IF NOT EXISTS public.student_summary
+(
+    course_entry_date date,
+    global_average double precision NOT NULL,
+    total_course_workload_percentage double precision NOT NULL,
+    id bigint NOT NULL DEFAULT nextval('student_summary_id_seq'::regclass),
+    course_id character varying(255) COLLATE pg_catalog."default",
+    shift character varying(255) COLLATE pg_catalog."default",
+    situation character varying(255) COLLATE pg_catalog."default",
+    student_rm character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT student_summary_pkey PRIMARY KEY (id),
+    CONSTRAINT student_summary_shift_check CHECK (shift::text = ANY (ARRAY['MORNING'::character varying, 'AFTERNOON'::character varying, 'NIGHT'::character varying]::text[])),
+    CONSTRAINT student_summary_situation_check CHECK (situation::text = ANY (ARRAY['PENDING'::character varying, 'CURSING'::character varying, 'CONCLUDED'::character varying, 'DISAPPROVED'::character varying, 'STOPPED'::character varying]::text[]))
+)
+
