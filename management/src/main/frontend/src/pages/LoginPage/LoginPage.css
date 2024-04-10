@@ -13,7 +13,7 @@
     display: flex;
 }
 
-.logo {
+.logo-login {
     justify-content: center;
     width: 35%;
     margin: auto;
@@ -89,4 +89,16 @@
     font-size: 16px;
     color: #839CFF;
     font-weight: 700;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.error-message.show {
+    display: block;
 }
