@@ -26,3 +26,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1 {
+  color: #FFE994;
+  font-size: 50px;
+  font-weight: 700;
+  margin: 0 auto 20px auto;
+}
