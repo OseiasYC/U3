@@ -1,0 +1,63 @@
+-- Database: course-db --
+
+-- Tabelas --
+
+----
+
+-- Table: public.course
+
+-- DROP TABLE IF EXISTS public.course;
+
+CREATE TABLE IF NOT EXISTS public.course
+(
+    id character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    name character varying(255) COLLATE pg_catalog."default",
+    students_rm character varying(255)[] COLLATE pg_catalog."default",
+    CONSTRAINT course_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.course
+    OWNER to postgres;
+
+----
+
+-- Table: public.course_subject
+
+-- DROP TABLE IF EXISTS public.course_subject;
+
+CREATE TABLE IF NOT EXISTS public.course_subject
+(
+    course_id character varying(3) COLLATE pg_catalog."default" NOT NULL,
+    subject_id bigint NOT NULL,
+    CONSTRAINT fk3aybh24ba5rqjcu3c9cuo40e4 FOREIGN KEY (course_id)
+        REFERENCES public.course (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fkrgvi27jaunywtmox1h4dpl0d0 FOREIGN KEY (subject_id)
+        REFERENCES public.subject (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+----
+
+-- Table: public.subject
+
+-- DROP TABLE IF EXISTS public.subject;
+
+CREATE TABLE IF NOT EXISTS public.subject
+(
+    workload integer NOT NULL,
+    id bigint NOT NULL DEFAULT nextval('subject_id_seq'::regclass),
+    name character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT subject_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.subject
+    OWNER to postgres;

@@ -1,0 +1,22 @@
+-- Database: enrollment-db --
+
+-- Table: public.student
+
+-- DROP TABLE IF EXISTS public.student;
+
+CREATE TABLE IF NOT EXISTS public.student
+(
+    birth date,
+    rm character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    cpf character varying(11) COLLATE pg_catalog."default",
+    username character varying(20) COLLATE pg_catalog."default",
+    name character varying(255) COLLATE pg_catalog."default",
+    courses_id character varying(255)[] COLLATE pg_catalog."default",
+    CONSTRAINT student_pkey PRIMARY KEY (rm)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.student
+    OWNER to postgres;
+
