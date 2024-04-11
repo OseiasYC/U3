@@ -1,0 +1,120 @@
+/* FIX ALL THIS */
+
+h2 {
+    font-size: larger;
+    font-weight: bold;
+    order: 1;
+}
+
+.crud-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: auto;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(30px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    text-align: center;
+    position: relative;
+}
+
+.view-edit-delete {
+    order: 2;
+}
+
+.create {
+    order: 3;
+}
+
+.view-edit-delete, .create {
+    flex-basis: calc(50% - 20px);
+    margin: 0; /* Override previous margin */
+    background: rgba(255, 255, 255, .1);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    width: calc(50% - 10px);
+}
+
+.view-edit-delete h1, .create h1 {
+    margin: 0 0 20px 0;
+    color: #FFFFFF;
+}
+
+.create form, .view-edit-delete div {
+    margin: 10px 0px;
+    position: relative;
+}
+
+.crud-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, .8);
+    border: none;
+    border-radius: 10px;
+    color: black;
+}
+
+.crud-container button:hover {
+    background-color: #839CFF;
+    color: white;
+}
+
+.edit-delete-button {
+    display: block;
+    width: 75px;
+    margin: 10px auto;
+    height: 45px;
+    background: white;
+    border: none;
+    border-radius: 20px;
+    color: #839CFF;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.create-button {
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    height: 45px;
+    background: white;
+    border: none;
+    border-radius: 20px;
+    color: #839CFF;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+@media (min-width: 768px) {
+    .crud-container {
+        flex: 1;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .view-edit-delete, .create {
+        flex-basis: 100%;
+    }
+
+    .view-edit-delete:nth-of-type(1), .view-edit-delete:nth-of-type(2) {
+        flex-basis: calc(50% - 10px);
+    }
+
+    .create {
+        flex-basis: calc(50% - 10px);
+    }
+}
