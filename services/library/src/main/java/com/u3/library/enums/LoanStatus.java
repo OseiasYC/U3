@@ -6,3 +6,4 @@ public enum LoanStatus {
     OVERDUE,
     LOST
 }
+

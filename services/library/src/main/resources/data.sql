@@ -10,3 +10,4 @@ VALUES
 ('The Great Gatsby', 'F. Scott Fitzgerald', 5),
 ('To Kill a Mockingbird', 'Harper Lee', 3),
 ('1984', 'George Orwell', 7);
+
