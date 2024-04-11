@@ -6,12 +6,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.u3</groupId>
-  <artifactId>faker</artifactId>
+  <artifactId>course-faker</artifactId>
   <version>1.0</version>
 
   <name>faker</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

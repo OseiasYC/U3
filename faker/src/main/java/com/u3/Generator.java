@@ -32,12 +32,12 @@ public class Generator {
                     Integer[] value = new Integer[subjectsSizeByCourse];
         
                     for (int i = 0; i < subjectsSizeByCourse; i++) {
-                        do {
-                            randomNumber = random.nextInt(100);
-                        } while (randomNumber == 0);
-                        value[i] = randomNumber;
+                        // do {
+                        //     randomNumber = random.nextInt(100);
+                        // } while (randomNumber == 0);
+                        value[i] = i;
                     }
-        
+
                     courses.put(key, value);
                     count++;
                 }
