@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "GradesApplication",
+            "request": "launch",
+            "mainClass": "com.u3.grades.GradesApplication",
+            "projectName": "grades"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-RequestsApplication<requests>",
             "request": "launch",
             "cwd": "${workspaceFolder}",

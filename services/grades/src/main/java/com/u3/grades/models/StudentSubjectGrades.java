@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.u3.grades.enums.Situation;
 
 import jakarta.persistence.Entity;
@@ -36,9 +37,11 @@ public class StudentSubjectGrades {
     private int abscences;
 
     @ManyToOne
+    @JsonBackReference
     private StudentSummary studentSummary;
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date subjectEntryDate;
+    
 }
