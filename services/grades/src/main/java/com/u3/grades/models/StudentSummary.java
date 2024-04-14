@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.u3.grades.enums.Shift;
 import com.u3.grades.enums.Situation;
 
@@ -43,6 +44,7 @@ public class StudentSummary {
     private Shift shift;
 
     @OneToMany(mappedBy = "studentSummary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<StudentSubjectGrades> studentSubjectGrades; 
 
     @Temporal(TemporalType.DATE)
