@@ -2,6 +2,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "LibraryApplication",
+            "request": "launch",
+            "mainClass": "com.u3.library.LibraryApplication",
+            "projectName": "library"
+        },
+        {
+            "type": "java",
+            "name": "EnrollmentApplication",
+            "request": "launch",
+            "mainClass": "com.u3.enrollment.EnrollmentApplication",
+            "projectName": "enrollment"
+        },
+        {
+            "type": "java",
+            "name": "CoursesApplication",
+            "request": "launch",
+            "mainClass": "com.u3.courses.CoursesApplication",
+            "projectName": "courses"
+        },
+        {
+            "type": "java",
             "name": "GradesApplication",
             "request": "launch",
             "mainClass": "com.u3.grades.GradesApplication",
