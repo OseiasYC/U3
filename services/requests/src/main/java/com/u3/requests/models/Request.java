@@ -31,7 +31,6 @@ public class Request {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Lob
     private byte[] attachment;
 
     @CreationTimestamp

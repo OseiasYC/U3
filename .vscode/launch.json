@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "com.u3.App",
+            "projectName": "course-faker"
+        },
+        {
+            "type": "java",
             "name": "LibraryApplication",
             "request": "launch",
             "mainClass": "com.u3.library.LibraryApplication",

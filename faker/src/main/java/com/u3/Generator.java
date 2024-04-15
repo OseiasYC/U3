@@ -1,10 +1,15 @@
 package com.u3;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.zip.DeflaterOutputStream;
+
+import com.github.javafaker.Faker;
 
 public class Generator {
 
@@ -12,7 +17,7 @@ public class Generator {
         List<String> randomRms = new ArrayList<>();
 
         for (Integer i = 1; i < size + 1; i++) {
-            String formattedNumber = String.format("%010d", i);
+            String formattedNumber = String.format("2000%05d", i);
             randomRms.add(formattedNumber);
         }
 
@@ -30,7 +35,7 @@ public class Generator {
                 for (char c3 = 'A'; c3 <= 'Z' && count < courseSize; c3++) {
                     String key = "" + c1 + c2 + c3;
                     Integer[] value = new Integer[subjectsSizeByCourse];
-        
+
                     for (int i = 0; i < subjectsSizeByCourse; i++) {
                         // do {
                         //     randomNumber = random.nextInt(100);
@@ -43,10 +48,20 @@ public class Generator {
                 }
             }
         }
-        
 
         return courses;
 
+    }
+    
+    public static byte[] generateRandomFile() throws IOException {
+        Faker faker = new Faker();
+        List<String> paragraphs = faker.lorem().paragraphs(5);
+        String fileContent = String.join("\n", paragraphs);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        DeflaterOutputStream deflaterOutputStream = new DeflaterOutputStream(outputStream);
+        deflaterOutputStream.write(fileContent.getBytes());
+        deflaterOutputStream.close();
+        return outputStream.toByteArray();
     }
 
     public static <K, V> void printMaps(Map<K, V[]> input) {
