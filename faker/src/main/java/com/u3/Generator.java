@@ -35,14 +35,12 @@ public class Generator {
                 for (char c3 = 'A'; c3 <= 'Z' && count < courseSize; c3++) {
                     String key = "" + c1 + c2 + c3;
                     Integer[] value = new Integer[subjectsSizeByCourse];
-
                     for (int i = 0; i < subjectsSizeByCourse; i++) {
                         // do {
-                        //     randomNumber = random.nextInt(100);
+                        // randomNumber = random.nextInt(100);
                         // } while (randomNumber == 0);
                         value[i] = i;
                     }
-
                     courses.put(key, value);
                     count++;
                 }
@@ -52,7 +50,7 @@ public class Generator {
         return courses;
 
     }
-    
+
     public static byte[] generateRandomFile() throws IOException {
         Faker faker = new Faker();
         List<String> paragraphs = faker.lorem().paragraphs(5);

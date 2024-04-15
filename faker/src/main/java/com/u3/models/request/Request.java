@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class Request {
-    
+
     public Request(String studentRm, String title, String description, byte[] attachment, LocalDateTime requestDate,
             String status) {
         this.studentRm = studentRm;

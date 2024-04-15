@@ -18,4 +18,5 @@ public class Subject {
     private int workload;
 
     private List<Course> courses;
+
 }
