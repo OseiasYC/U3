@@ -21,4 +21,5 @@ public class Course {
     private List<String> studentsRm;
 
     private List<Subject> subjects;
+
 }
