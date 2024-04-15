@@ -19,7 +19,7 @@ public class Subject {
 
     private String name;
 
-    private int workload;
+    private Integer workload;
 
     @ManyToMany(mappedBy = "subjects")
     private List<Course> courses;

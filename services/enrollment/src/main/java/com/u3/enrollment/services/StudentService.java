@@ -10,48 +10,54 @@ import org.springframework.stereotype.Service;
 import com.u3.enrollment.models.Student;
 import com.u3.enrollment.repositories.StudentRepository;
 
+
+
 @Service
 public class StudentService {
 
     @Autowired
-    StudentRepository studentRepository;
+    StudentRepository repository;
     
-    
-    public List<Student> findAll(){
-        return studentRepository.findAll();
-    }
     
     public Optional<Student> findByRm(String rm){
-        return studentRepository.findByRm(rm);
+        return repository.findByRm(rm);
     }
     
     public List<Student> findByName(String name){
-        return studentRepository.findByName(name);
+        return repository.findByName(name);
     }
     
     public List<Student> findByUsername(String username){
-        return studentRepository.findByUsername(username);
+        return repository.findByUsername(username);
     }
     
     public Optional<Student> findByCpf(String cpf){
-        return studentRepository.findByCpf(cpf);
+        return repository.findByCpf(cpf);
     }
     
     public ResponseEntity<String> save(Student student){
-         studentRepository.save(student);
-         return ResponseEntity.ok("Ok");
-     }
-        
-     public void delete(String rm){
-         Optional<Student> optionalStudent = studentRepository.findByRm(rm);
+        repository.save(student);
+        return ResponseEntity.ok("Ok");
+    }
+    
+    public List<Student> findAll(){
+        return repository.findAll();
+    }
+    
+    public ResponseEntity<String> update(Student student,String rm) {
+        Optional<Student> optionalStudent = repository.findById(rm);
+        if (optionalStudent.isPresent()) {
+            repository.save(student);
+        }
+        return ResponseEntity.ok("Ok");
+    }
+
+    public void delete(String rm){
+         Optional<Student> optionalStudent = repository.findByRm(rm);
          if (optionalStudent.isPresent()) {
-             studentRepository.deleteByRm(rm);
+             repository.deleteByRm(rm);
         }
          
      }
 
-
-    // public List<StudentDTO> createStudentDTO(Student student){}
-    
-    // public StudentDTO createStudentDTO(Student student){}
 }

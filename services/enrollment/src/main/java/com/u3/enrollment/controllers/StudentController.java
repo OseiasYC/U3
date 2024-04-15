@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,46 +17,52 @@ import org.springframework.web.bind.annotation.RestController;
 import com.u3.enrollment.models.Student;
 import com.u3.enrollment.services.StudentService;
 
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
     
     @Autowired
-    StudentService studentService;
+    StudentService service;
 
-    @GetMapping("/all")
-	public List<Student> findAll() {
-        return studentService.findAll();
-	}
-    
-    @GetMapping("findRm/{rm}")
+    @GetMapping("rm/{rm}")
     public Optional<Student> findByRm(@PathVariable String rm){
-        return studentService.findByRm(rm);
-    }
-
-    @GetMapping("findName/{name}")
-    public List<Student> findByName(@PathVariable String name){
-        return studentService.findByName(name);
+        return service.findByRm(rm);
     }
     
-    @GetMapping("findUsername/{username}")
-    public List<Student> findByUsername(@PathVariable String username){
-        return studentService.findByUsername(username);
+    @GetMapping("name/{name}")
+    public List<Student> findByName(@PathVariable String name){
+        return service.findByName(name);
     }
-
-    @GetMapping("findCpf/{cpf}")
+    
+    @GetMapping("username/{username}")
+    public List<Student> findByUsername(@PathVariable String username){
+        return service.findByUsername(username);
+    }
+    
+    @GetMapping("cpf/{cpf}")
     public Optional<Student> findByCpf(@PathVariable String cpf){
-        return studentService.findByCpf(cpf);
+        return service.findByCpf(cpf);
+    }
+    
+    @GetMapping("/all")
+    public List<Student> findAll() {
+        return service.findAll();
     }
 
     @PostMapping("/add")
     public ResponseEntity<String> save(@RequestBody Student student){
-        return studentService.save(student);
+        return service.save(student);
     }
-
+    
+    @PutMapping("update/{rm}")
+    public ResponseEntity<String> update(@RequestBody Student student, @PathVariable String rm) {
+        return service.update(student, rm);
+    }
+    
     @DeleteMapping("delete/{rm}")
     public void delete(@PathVariable("rm") String rm){
-        studentService.delete(rm);
+        service.delete(rm);
     }
 
 
