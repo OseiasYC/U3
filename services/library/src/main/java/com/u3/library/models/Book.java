@@ -18,5 +18,5 @@ public class Book {
 
     private String author;
 
-    private int amount; //quantidade
+    private Integer amount; //quantidade
 }

@@ -11,6 +11,7 @@ import com.github.javafaker.Faker;
 import com.u3.connections.CourseServiceBatch;
 import com.u3.connections.DatabaseConnection;
 import com.u3.connections.EnrollmentServiceBatch;
+import com.u3.connections.LibraryServiceBatch;
 import com.u3.connections.RequestServiceBatch;
 
 public class App {
@@ -23,14 +24,14 @@ public class App {
 
     public static DatabaseConnection CourseDbConnection = new DatabaseConnection("courses-db", "postgres", "admin");
     public static DatabaseConnection RequestDbConnection = new DatabaseConnection("requests-db", "postgres", "admin");
-    public static DatabaseConnection EnrollmentDbConnection = new DatabaseConnection("enrollments-db", "postgres",
-            "admin");
+    public static DatabaseConnection EnrollmentDbConnection = new DatabaseConnection("enrollments-db", "postgres", "admin");
+    public static DatabaseConnection LibraryDbConnection = new DatabaseConnection("library-db", "postgres", "admin");
+    
 
     public static CourseServiceBatch courseServiceBatch = new CourseServiceBatch(CourseDbConnection.getConnection());
-    public static RequestServiceBatch requestServiceBatch = new RequestServiceBatch(
-            RequestDbConnection.getConnection());
-    public static EnrollmentServiceBatch enrollmentServiceBatch = new EnrollmentServiceBatch(
-            EnrollmentDbConnection.getConnection());
+    public static RequestServiceBatch requestServiceBatch = new RequestServiceBatch(RequestDbConnection.getConnection());
+    public static EnrollmentServiceBatch enrollmentServiceBatch = new EnrollmentServiceBatch(EnrollmentDbConnection.getConnection());
+    public static LibraryServiceBatch libraryServiceBatch = new LibraryServiceBatch(LibraryDbConnection.getConnection());
 
     public static void main(String[] args) {
         // CourseDbConnection.getConnection();
@@ -39,6 +40,8 @@ public class App {
         // createRequestBatch();
         // EnrollmentDbConnection.getConnection();
         // createEnrollmentBatch();
+        // LibraryDbConnection.getConnection();
+        // createLibraryBatch();
     }
 
     public static void createCourseBatch() {
@@ -81,6 +84,30 @@ public class App {
 
                 enrollmentServiceBatch.insertData(rm, name, username.substring(0, Math.min(username.length(), 20)), cpf,
                         birth, coursesId);
+            }
+
+            System.out.println("Inserções bem-sucedidas!");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void createLibraryBatch() {
+        String[] loanStatuses = { "BORROWED", "RETURNED", "OVERDUE", "LOST" };
+
+        try {
+            for (int i = 0; i < 10; i++) {
+                String title = faker.book().title();
+                String author = faker.book().author();
+                Integer amount = randomNumber.nextInt(10);
+                
+                String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
+                Long bookId = (long) randomNumber.nextInt(10);
+                String loanStatus = loanStatuses[randomNumber.nextInt(loanStatuses.length)];
+                LocalDateTime loanDate = LocalDateTime.now();
+                LocalDateTime returnDate = LocalDateTime.now().plusDays(7);
+
+                libraryServiceBatch.insertData(studentRm, bookId, loanStatus, loanDate, returnDate, title, author, amount);
             }
 
             System.out.println("Inserções bem-sucedidas!");
