@@ -30,11 +30,11 @@ public class StudentSubjectGrades {
     @Enumerated(EnumType.STRING)
     private Situation situation;
 
-    private int totalSubjectWorkload;
+    private Integer totalSubjectWorkload;
 
     private double grades[] = new double[2];
 
-    private int abscences;
+    private Integer abscences;
 
     @ManyToOne
     @JsonBackReference

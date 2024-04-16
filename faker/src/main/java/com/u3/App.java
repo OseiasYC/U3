@@ -11,6 +11,7 @@ import com.github.javafaker.Faker;
 import com.u3.connections.CourseServiceBatch;
 import com.u3.connections.DatabaseConnection;
 import com.u3.connections.EnrollmentServiceBatch;
+import com.u3.connections.GradesServiceBatch;
 import com.u3.connections.LibraryServiceBatch;
 import com.u3.connections.RequestServiceBatch;
 
@@ -23,25 +24,32 @@ public class App {
     public static Map<String, Integer[]> courses = Generator.generateCourses(50, 10);
 
     public static DatabaseConnection CourseDbConnection = new DatabaseConnection("courses-db", "postgres", "admin");
-    public static DatabaseConnection RequestDbConnection = new DatabaseConnection("requests-db", "postgres", "admin");
-    public static DatabaseConnection EnrollmentDbConnection = new DatabaseConnection("enrollments-db", "postgres", "admin");
+    public static DatabaseConnection EnrollmentDbConnection = new DatabaseConnection("enrollments-db", "postgres",
+            "admin");
+    public static DatabaseConnection GradesDbConnection = new DatabaseConnection("grades-db", "postgres", "admin");
     public static DatabaseConnection LibraryDbConnection = new DatabaseConnection("library-db", "postgres", "admin");
-    
+    public static DatabaseConnection RequestDbConnection = new DatabaseConnection("requests-db", "postgres", "admin");
 
     public static CourseServiceBatch courseServiceBatch = new CourseServiceBatch(CourseDbConnection.getConnection());
-    public static RequestServiceBatch requestServiceBatch = new RequestServiceBatch(RequestDbConnection.getConnection());
-    public static EnrollmentServiceBatch enrollmentServiceBatch = new EnrollmentServiceBatch(EnrollmentDbConnection.getConnection());
-    public static LibraryServiceBatch libraryServiceBatch = new LibraryServiceBatch(LibraryDbConnection.getConnection());
+    public static EnrollmentServiceBatch enrollmentServiceBatch = new EnrollmentServiceBatch(
+            EnrollmentDbConnection.getConnection());
+    public static GradesServiceBatch gradesServiceBatch = new GradesServiceBatch(GradesDbConnection.getConnection());
+    public static LibraryServiceBatch libraryServiceBatch = new LibraryServiceBatch(
+            LibraryDbConnection.getConnection());
+    public static RequestServiceBatch requestServiceBatch = new RequestServiceBatch(
+            RequestDbConnection.getConnection());
 
     public static void main(String[] args) {
         // CourseDbConnection.getConnection();
         // createCourseBatch();
-        // RequestDbConnection.getConnection();
-        // createRequestBatch();
         // EnrollmentDbConnection.getConnection();
         // createEnrollmentBatch();
+        GradesDbConnection.getConnection();
+        createGradesBatch();
         // LibraryDbConnection.getConnection();
         // createLibraryBatch();
+        // RequestDbConnection.getConnection();
+        // createRequestBatch();
     }
 
     public static void createCourseBatch() {
@@ -92,6 +100,37 @@ public class App {
         }
     }
 
+    public static void createGradesBatch() {
+        String[] situations = { "PENDING", "STUDYING", "CONCLUDED", "DISAPPROVED", "STOPPED" };
+        String[] shifts = { "MORNING", "AFTERNOON", "NIGHT" };
+
+        try {
+            for (int i = 0; i < 50; i++) {
+                String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
+                String courseId = courses.keySet().toArray()[randomNumber.nextInt(courses.size())].toString();
+                double totalCourseWorkloadPercentage = randomNumber.nextDouble() * 100;
+                double globalAverage = randomNumber.nextDouble() * 10;
+                String situation = situations[randomNumber.nextInt(situations.length)];
+                String shift = shifts[randomNumber.nextInt(shifts.length)];
+                Date courseEntryDate = faker.date().birthday();
+                Integer totalSubjectWorkload = randomNumber.nextInt(90);
+                Double[] grades = { randomNumber.nextDouble() * 10, randomNumber.nextDouble() * 10,
+                        randomNumber.nextDouble() * 10 };
+                Integer abscences = randomNumber.nextInt(14);
+                Long studentSummaryId = (long) randomNumber.nextInt(8) + 1;
+                Date subjectEntryDate = faker.date().birthday();
+                gradesServiceBatch.insertData(studentRm, courseId, totalCourseWorkloadPercentage, globalAverage,
+                        situation,
+                        shift, courseEntryDate, totalSubjectWorkload, grades, abscences,
+                        studentSummaryId, subjectEntryDate);
+            }
+
+            System.out.println("Inserções bem-sucedidas!");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void createLibraryBatch() {
         String[] loanStatuses = { "BORROWED", "RETURNED", "OVERDUE", "LOST" };
 
@@ -100,14 +139,15 @@ public class App {
                 String title = faker.book().title();
                 String author = faker.book().author();
                 Integer amount = randomNumber.nextInt(10);
-                
+
                 String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
                 Long bookId = (long) randomNumber.nextInt(10);
                 String loanStatus = loanStatuses[randomNumber.nextInt(loanStatuses.length)];
                 LocalDateTime loanDate = LocalDateTime.now();
                 LocalDateTime returnDate = LocalDateTime.now().plusDays(7);
 
-                libraryServiceBatch.insertData(studentRm, bookId, loanStatus, loanDate, returnDate, title, author, amount);
+                libraryServiceBatch.insertData(studentRm, bookId, loanStatus, loanDate, returnDate, title, author,
+                        amount);
             }
 
             System.out.println("Inserções bem-sucedidas!");

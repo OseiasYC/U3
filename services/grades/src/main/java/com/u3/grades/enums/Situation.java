@@ -2,7 +2,7 @@ package com.u3.grades.enums;
 
 public enum Situation {
     PENDING,
-    CURSING,
+    STUDYING,
     CONCLUDED,
     DISAPPROVED,
     STOPPED
