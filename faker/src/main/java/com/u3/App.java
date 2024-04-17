@@ -49,14 +49,14 @@ public class App {
     public static void main(String[] args) {
         CourseDbConnection.getConnection();
         createCourseBatch();
-        EnrollmentDbConnection.getConnection();
-        createEnrollmentBatch();
-        GradesDbConnection.getConnection();
-        createGradesBatch();
-        LibraryDbConnection.getConnection();
-        createLibraryBatch();
-        RequestDbConnection.getConnection();
-        createRequestBatch();
+        // EnrollmentDbConnection.getConnection();
+        // createEnrollmentBatch();
+        // GradesDbConnection.getConnection();
+        // createGradesBatch();
+        // LibraryDbConnection.getConnection();
+        // createLibraryBatch();
+        // RequestDbConnection.getConnection();
+        // createRequestBatch();
     }
 
     public static void createCourseBatch() {
@@ -75,7 +75,7 @@ public class App {
                 String subjectName = faker.educator().course();
                 int subjectWorkload = randomNumber.nextBoolean() ? 60 : 40;
 
-                courseServiceBatch.insertData(courseId, courseName, studentsRm, subjectName, subjectWorkload);
+                courseServiceBatch.insertData2(courseId, courseName, studentsRm, subjectName, subjectWorkload);
             }
 
             System.out.println("Inserções bem-sucedidas!");
