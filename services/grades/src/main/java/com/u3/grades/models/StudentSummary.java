@@ -44,7 +44,6 @@ public class StudentSummary {
     private Shift shift;
 
     @OneToMany(mappedBy = "studentSummary", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<StudentSubjectGrades> studentSubjectGrades; 
 
     @Temporal(TemporalType.DATE)

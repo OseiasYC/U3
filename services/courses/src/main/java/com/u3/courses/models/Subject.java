@@ -2,6 +2,8 @@ package com.u3.courses.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +14,7 @@ import lombok.Data;
 @Entity
 @Data
 public class Subject {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +24,6 @@ public class Subject {
     private Integer workload;
 
     @ManyToMany(mappedBy = "subjects")
+    @JsonBackReference
     private List<Course> courses;
 }
