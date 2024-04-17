@@ -2,8 +2,6 @@ package com.u3.models.request;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Lob;
-
 import org.hibernate.annotations.CreationTimestamp;
 
 import lombok.Data;
