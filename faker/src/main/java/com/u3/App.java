@@ -17,11 +17,18 @@ import com.u3.connections.RequestServiceBatch;
 
 public class App {
 
+    // Set quantity of generated data
+    private static Integer coursesQuantity = 100;
+    private static Integer enrollmentsQuantity = 100;
+    private static Integer gradesQuantity = 100;
+    private static Integer libraryQuantity = 100;
+    private static Integer requestsQuantity = 1000;
+
     public static Faker faker = new Faker(Locale.forLanguageTag("ptBR"));
     public static Random randomNumber = new Random();
 
     public static List<String> randomRms = Generator.generateRMs(100);
-    public static Map<String, Integer[]> courses = Generator.generateCourses(50, 10);
+    public static Map<String, Integer[]> courses = Generator.generateCourses(coursesQuantity, 10);
 
     public static DatabaseConnection CourseDbConnection = new DatabaseConnection("courses-db", "postgres", "admin");
     public static DatabaseConnection EnrollmentDbConnection = new DatabaseConnection("enrollments-db", "postgres",
@@ -40,16 +47,16 @@ public class App {
             RequestDbConnection.getConnection());
 
     public static void main(String[] args) {
-        // CourseDbConnection.getConnection();
-        // createCourseBatch();
-        // EnrollmentDbConnection.getConnection();
-        // createEnrollmentBatch();
+        CourseDbConnection.getConnection();
+        createCourseBatch();
+        EnrollmentDbConnection.getConnection();
+        createEnrollmentBatch();
         GradesDbConnection.getConnection();
         createGradesBatch();
-        // LibraryDbConnection.getConnection();
-        // createLibraryBatch();
-        // RequestDbConnection.getConnection();
-        // createRequestBatch();
+        LibraryDbConnection.getConnection();
+        createLibraryBatch();
+        RequestDbConnection.getConnection();
+        createRequestBatch();
     }
 
     public static void createCourseBatch() {
@@ -80,7 +87,7 @@ public class App {
     public static void createEnrollmentBatch() {
 
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < enrollmentsQuantity; i++) {
                 String rm = randomRms.get(randomNumber.nextInt(randomRms.size()));
                 String name = faker.name().fullName();
                 String username = faker.name().username();
@@ -105,7 +112,7 @@ public class App {
         String[] shifts = { "MORNING", "AFTERNOON", "NIGHT" };
 
         try {
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < gradesQuantity; i++) {
                 String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
                 String courseId = courses.keySet().toArray()[randomNumber.nextInt(courses.size())].toString();
                 double totalCourseWorkloadPercentage = randomNumber.nextDouble() * 100;
@@ -117,12 +124,10 @@ public class App {
                 Double[] grades = { randomNumber.nextDouble() * 10, randomNumber.nextDouble() * 10,
                         randomNumber.nextDouble() * 10 };
                 Integer abscences = randomNumber.nextInt(14);
-                Long studentSummaryId = (long) randomNumber.nextInt(8) + 1;
                 Date subjectEntryDate = faker.date().birthday();
                 gradesServiceBatch.insertData(studentRm, courseId, totalCourseWorkloadPercentage, globalAverage,
                         situation,
-                        shift, courseEntryDate, totalSubjectWorkload, grades, abscences,
-                        studentSummaryId, subjectEntryDate);
+                        shift, courseEntryDate, totalSubjectWorkload, grades, abscences, subjectEntryDate);
             }
 
             System.out.println("Inserções bem-sucedidas!");
@@ -135,18 +140,17 @@ public class App {
         String[] loanStatuses = { "BORROWED", "RETURNED", "OVERDUE", "LOST" };
 
         try {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < libraryQuantity; i++) {
                 String title = faker.book().title();
                 String author = faker.book().author();
                 Integer amount = randomNumber.nextInt(10);
 
                 String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
-                Long bookId = (long) randomNumber.nextInt(10);
                 String loanStatus = loanStatuses[randomNumber.nextInt(loanStatuses.length)];
                 LocalDateTime loanDate = LocalDateTime.now();
                 LocalDateTime returnDate = LocalDateTime.now().plusDays(7);
 
-                libraryServiceBatch.insertData(studentRm, bookId, loanStatus, loanDate, returnDate, title, author,
+                libraryServiceBatch.insertData(studentRm, loanStatus, loanDate, returnDate, title, author,
                         amount);
             }
 
@@ -160,7 +164,7 @@ public class App {
         String[] statuses = { "OPEN", "CONCLUDED", "CANCELED" };
 
         try {
-            for (int i = 0; i < 1; i++) {
+            for (int i = 0; i < requestsQuantity; i++) {
                 String studentRm = randomRms.get(randomNumber.nextInt(randomRms.size()));
                 String title = faker.lorem().sentence();
                 String description = faker.lorem().paragraph();
