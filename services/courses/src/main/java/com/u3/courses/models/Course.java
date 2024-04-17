@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Course{
+public class Course {
 
     @Id
     @Column(length = 3)
