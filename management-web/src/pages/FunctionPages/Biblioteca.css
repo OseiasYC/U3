@@ -86,6 +86,7 @@ p {
     outline: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     transition: background-color 0.3s, color 0.3s;
+    margin-bottom: 10px;
 }
 
 .library-div button:hover {

@@ -57,7 +57,6 @@ public class App {
         // createLibraryBatch();
         // RequestDbConnection.getConnection();
         // createRequestBatch();
-        Generator.printMaps(courses);
     }
 
     public static void createCourseBatch() {

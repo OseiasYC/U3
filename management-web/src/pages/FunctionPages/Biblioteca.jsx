@@ -55,6 +55,37 @@ const Biblioteca = () => {
     alert(`Emprestando o livro "${selectedBookTitle}" para o(a) estudante: ${selectedStudentFullName}`);
   };
 
+  const handleReturnBook = () => {
+    // Verifica se o livro e o estudante selecionados são válidos
+    if (!selectedBookTitle || !selectedStudentFullName) {
+      alert("Por favor, selecione um livro e um estudante antes de devolver.");
+      return;
+    }
+  
+    // Encontra o livro a ser devolvido
+    const returnedBook = books.find(book => book.title === selectedBookTitle);
+    
+    // Atualiza a quantidade do livro devolvido
+    const updatedBooks = books.map(book => {
+      if (book.title === selectedBookTitle) {
+        return { ...book, quantity: book.quantity + 1 };
+      }
+      return book;
+    });
+  
+    // Atualiza o estado dos livros
+    setBooks(updatedBooks);
+  
+    // Limpa os estados dos livros e estudantes selecionados
+    setSelectedBookTitle('');
+    setSelectedBookAuthor('');
+    setSelectedStudentFullName('');
+    setStudentRegistration('');
+  
+    // Alerta que o livro foi devolvido com sucesso
+    alert(`Livro "${returnedBook.title}" devolvido com sucesso.`);
+  };
+
   return (
     <div className='library-div'>
       <h1>Biblioteca</h1>
@@ -100,6 +131,7 @@ const Biblioteca = () => {
         Livro: {selectedBookTitle} - {selectedBookAuthor}
       </p>
       <button onClick={handleLendBook}>Emprestar</button>
+      <button onClick={handleReturnBook}>Devolver</button>
     </div>
   );
 }
