@@ -1,0 +1,6 @@
+api\now\gateway\NowGatewayApplication.class
+api\now\gateway\util\ErrorExceptionGateway.class
+api\now\gateway\util\CatchErro.class
+api\now\gateway\filter\validator\RouterValidator.class
+api\now\gateway\filter\AuthenticationFilter.class
+api\now\gateway\util\JwtUtil.class
