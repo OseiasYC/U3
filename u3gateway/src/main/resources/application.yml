@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+jwt:
+  secret: U3Ucsal
+
+spring:
+  application:
+    name: u3-api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: u3-api-authorizationserver
+          uri: http://localhost:8088
+          predicates:
+            - Method=GET,POST
+            - Path=/AuthorizationServer/auth/**
+
+        - id: u3-api-courses
+          uri: http://localhost:8081
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/courses/**
+
+        - id: u3-api-enrollment
+          uri: http://localhost:8082
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/enrollment/**
+
+        - id: u3-api-grades
+          uri: http://localhost:8083
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/grades/**
+
+        - id: u3-api-library
+          uri: http://localhost:8084
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/library/**
+
+        - id: u3-api-requests
+          uri: http://localhost:8085
+          predicates:
+            - Method=GET,POST,PUT,DELETE
+            - Path=/requests/**
