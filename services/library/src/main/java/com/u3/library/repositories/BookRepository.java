@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query(value = "SELECT * FROM book WHERE UPPER(title) LIKE UPPER(?1%);", nativeQuery = true)
+    @Query(value = "SELECT * FROM book WHERE UPPER(title) LIKE UPPER(concat('%', ?1, '%'));", nativeQuery = true)
     List<Book> findByTitle(String title);
 
     List<Book> findByAuthor(String author);
