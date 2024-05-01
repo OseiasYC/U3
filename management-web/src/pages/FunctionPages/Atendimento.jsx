@@ -13,7 +13,6 @@ const Atendimento = () => {
   const [sendingDate] = useState(new Date().toISOString());
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // caso tente clicar e enviar um atendimento, verá que os dados no banco salvo serão nulos, tem que corrigir isso.
   const createRequest = async () => {
     const requestBody = {
       studentRm: registrationNumber,
@@ -98,7 +97,7 @@ const Atendimento = () => {
       <div className="input-group">
         {/* TODO: Ajustar posição de ícones */}
         {/* <AiOutlineFileAdd className='icon' /> */}
-        <input type="file" onClick={handleFileChange} />
+        <input type="file" onChange={handleFileChange} />
       </div>
       <div className="sending-date">
         <label>Data da solicitação: {showDate}</label>

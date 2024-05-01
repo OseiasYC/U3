@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "./Avaliacao.css";
 import gradesFetch from "../../axios/Grades";
+import enrollmentFetch from "../../axios/EnrollmentFetch";
+import coursesFetch from "../../axios/CoursesFetch";
 
 const Avaliacao = () => {
   const [enrollmentNumber, setEnrollmentNumber] = useState("");
   const [studentData, setStudentData] = useState(null);
   const [studentSummary, setStudentSummary] = useState(null);
   const [studentSubjectGrades, setStudentSubjectGrades] = useState(null);
+  const [student, setStudent] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   const searchGrades = async () => {
     try {
@@ -30,17 +34,39 @@ const Avaliacao = () => {
     } catch (error) {
       console.error("Erro ao buscar o resumo por disciplina do aluno", error);
     }
+
+    try {
+      const response3 = await enrollmentFetch.get(
+        `/student/rm/${enrollmentNumber}`
+      );
+      const data3 = response3.data;
+      setStudent(data3);
+      console.log(student);
+    } catch (error) {
+      console.error("Erro ao buscar o aluno", error);
+    }
+
+    try {
+      const response4 = await coursesFetch.get(
+        `/course/students/${enrollmentNumber}`
+      );
+      const data4 = response4.data;
+      setCourses(data4);
+      console.log(courses);
+    } catch (error) {
+      console.error("Erro ao buscar o aluno", error);
+    }
   };
 
-  //Remover isso aqui futuramente
+
   const students = [
     {
-      enrollmentNumber: "123456",
-      name: "John Doe",
+      enrollmentNumber: "200017414",
+      name: "Lucas Farias da Silva",
       course: "Engenharia de Software",
-      subjects: 2,
+      subjects: 3,
       completedCourseHours: "80%",
-      globalAverage: 9.4,
+      globalAverage: 9.2,
       courseStatus: "Cursando",
       courseShift: "Matutino",
       courseEntryDate: "01-01-2021",
@@ -50,7 +76,7 @@ const Avaliacao = () => {
           situation: "Cursando",
           shift: "Matutino",
           totalWorkload: "60h",
-          grades1stAssessment: "9,5",
+          grades1stAssessment: "",
           grades2ndAssessment: "",
           numberOfAbsences: 2,
           dateEntry: "22-02-2024",
@@ -60,10 +86,63 @@ const Avaliacao = () => {
           situation: "Cursando",
           shift: "Matutino",
           totalWorkload: "60h",
+          grades1stAssessment: "0",
+          grades2ndAssessment: "",
+          numberOfAbsences: 0,
+          dateEntry: "23-02-2024",
+        },
+        {
+          subject: "Tópicos Especiais em Engenharia de Software",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
+          grades1stAssessment: "6,4",
+          grades2ndAssessment: "",
+          numberOfAbsences: 2,
+          dateEntry: "22-02-2024",
+        },
+      ],
+    },
+    {
+      enrollmentNumber: "200019213",
+      name: "Iago Roque Ribeiro Novaes",
+      course: "Engenharia de Software",
+      subjects: 3,
+      completedCourseHours: "80%",
+      globalAverage: 9.53,
+      courseStatus: "Cursando",
+      courseShift: "Matutino",
+      courseEntryDate: "04-12-2020",
+      subjectsInformation: [
+        {
+          subject: "Tópicos Avançados em Banco de Dados",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
+          grades1stAssessment: "",
+          grades2ndAssessment: "",
+          numberOfAbsences: 0,
+          dateEntry: "01-02-2024",
+        },
+        {
+          subject: "Compiladores",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
+          grades1stAssessment: "0",
+          grades2ndAssessment: "",
+          numberOfAbsences: 0,
+          dateEntry: "01-02-2024",
+        },
+        {
+          subject: "Tópicos Especiais em Engenharia de Software",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
           grades1stAssessment: "7",
           grades2ndAssessment: "",
-          numberOfAbsences: 1,
-          dateEntry: "23-02-2024",
+          numberOfAbsences: 0,
+          dateEntry: "01-02-2024",
         },
       ],
     },
@@ -85,7 +164,7 @@ const Avaliacao = () => {
 
   const renderStudentData = () => {
     if (!studentData) {
-      return <p>Não foram encontrados dados para a matrícula inserida.</p>;
+      return <p></p>;
     }
     return (
       <>

@@ -94,7 +94,7 @@ INSERT INTO student_subject_grades (course_id, situation, total_subject_workload
 -- Library --
 --Loans:
 INSERT INTO Loan (student_rm, book_id, loan_status, loan_date, return_date) VALUES 
-('1234567890', 1, 'BORROWED', '2024-03-30 10:00:00', '2024-04-10 10:00:00'),
+('200019213', 1, 'BORROWED', '2024-03-30 10:00:00', '2024-04-10 10:00:00'),
 ('0987654321', 2, 'OVERDUE', '2024-03-28 15:45:00', '2024-04-07 15:45:00'),
 ('1234567890', 3, 'RETURNED', '2024-03-25 10:00:00', '2024-04-05 10:00:00'),
 ('0987654321', 1, 'BORROWED', '2024-03-30 15:45:00', '2024-04-10 15:45:00'),
@@ -120,7 +120,7 @@ INSERT INTO book (title, author, amount) VALUES
 
 -- Requests --
 INSERT INTO request (student_rm, title, description, request_date, status) VALUES
-('200020000', 'Requerimento de Horas Complementares', 'Quero validar mais horas complementares', CURRENT_TIMESTAMP, 'OPEN'),
+('200019213', 'Requerimento de Horas Complementares', 'Quero validar mais horas complementares', CURRENT_TIMESTAMP, 'OPEN'),
 ('200020001', 'Requerimento de Aproveitamento de Disciplina', 'Quero aproveitar a disciplina de Banco de Dados I', CURRENT_TIMESTAMP, 'OPEN'),
 ('200020002', 'Requerimento de Trancamento de Matrícula', 'Quero trancar minha matrícula', CURRENT_TIMESTAMP, 'OPEN'),
 ('200020003', 'Requerimento de Colação de Grau', 'Quero colar grau', CURRENT_TIMESTAMP, 'OPEN'),

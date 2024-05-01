@@ -45,7 +45,7 @@ const Matricula = () => {
     try {
       const response = await enrollmentFetch.post(`/student/add`, requestBody);
 
-      alert(`Matrícula efetuada com sucesso! RM do estudante: ${randomRM}`); //TODO: fazer esse alert funcionar
+      alert(`Matrícula efetuada com sucesso! RM do estudante: ${randomRM} Username do estudante: ${username}`); //TODO: fazer esse alert funcionar
       console.log("Solicitação enviada com sucesso!", response.data);
     } catch (error) {
       console.error(error);
@@ -95,7 +95,7 @@ const Matricula = () => {
             type="text"
             value={cpf}
             onChange={(e) => setCpf(e.target.value)}
-            placeholder="Digite o CPF"
+            placeholder="Digite o CPF" //TODO: limitar a 11 carcteres
             required
           />
         </label>
