@@ -5,17 +5,9 @@ import './Biblioteca.css';
 
 const Biblioteca = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [book, setBook] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
   const [typingTimeout, setTypingTimeout] = useState(null);
-  const [selectedBookInfo, setSelectedBookInfo] = useState(null);
-
-  useEffect(() => {
-    if (selectedBookInfo) {
-      setBook(selectedBookInfo);
-    }
-  }, [selectedBookInfo]);
 
   useEffect(() => {
     if (typingTimeout) {
@@ -30,7 +22,6 @@ const Biblioteca = () => {
       setTypingTimeout(timeoutId);
     } else {
       setSearchResults([]);
-      setShowResults(false);
     }
 
     return () => {
@@ -45,23 +36,27 @@ const Biblioteca = () => {
       const response = await libraryFetch.get(`/books/title/${title}`);
       const data = response.data;
       setSearchResults(data);
-      setShowResults(true);
     } catch (error) {
       console.error('Erro ao buscar livro:', error);
       setSearchResults([]);
-      setShowResults(false);
     }
   };
 
   const handleSelectBook = (selectedBook) => {
-    setSelectedBookInfo(selectedBook);
-    setSearchResults([]);
-    setShowResults(false);
+    setSelectedBook(selectedBook);
   };
+
+  const handleLendBook = () => {
+    // TODO: Adicionar lógica de empréstimo relacionando ao db
+  }
+
+  const handleReturnBook = () => {
+    // TODO: Adicionar lógica de devolução relacionando ao db
+  }
 
   return (
     <div className='library-div'>
-    <h1>Biblioteca</h1>
+      <h1>Biblioteca</h1>
       <div className='book-input'>
         <FaBookOpen className='book-icon' />
         <input
@@ -70,24 +65,15 @@ const Biblioteca = () => {
           placeholder="Pesquise por título do livro"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setShowResults(true)}
         />
-        {showResults && (
-  <datalist id="book-list">
-    {searchResults.map((result) => (
-    <option key={result.id} value={`${result.title}`}><br />{`${result.author} - Disponível: ${result.amount}`}</option>
-    ))}
-  </datalist>
-)}
+        <datalist id="book-list">
+          {searchResults.map((result) => (
+            <option key={result.id} value={`${result.title}`} onClick={(result) => handleSelectBook(result)}><br />{`${result.author} - Disponível: ${result.amount}`}</option>
+          ))}
+        </datalist>
       </div>
-      {/* Exibe o livro selecionado (se existir) */}
-      {book && (
-        <div className="book-details">
-          <h3>{book.title}</h3>
-          <p>Autor: {book.author}</p>
-          <p>Disponível: {book.amount}</p>
-        </div>
-      )}
+        <button onClick={handleLendBook}>Emprestar</button>
+        <button onClick={handleReturnBook}>Devolver</button>
     </div>
   );
 }
