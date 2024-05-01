@@ -1,12 +1,37 @@
 import React, { useState } from 'react';
 import './Matricula.css'
+import enrollmentFetch from '../../axios/EnrollmentFetch';
+import coursesFetch from '../../axios/CoursesFetch';
 
 const Matricula = () => {
-  const [courses] = useState([
-    { id: '1', name: 'Engenharia da Computação' },
-    { id: '2', name: 'Sistemas de Informação' },
-    { id: '3', name: 'Ciência da Computação' },
-  ]);
+  const [course, setCourse] = useState([]);
+  const [enrollment, setEnrollment] = useState(null);
+  const [rm, setRm] = useState(null);
+  const [cpf, setCpf] = useState(null);
+  const [birth, setBirth] = useState(null);
+
+  // const searchCourses = async () => {
+  //   try {
+  //     const response = await coursesFetch.get(`/course/all`);
+  //     const data = response.data;
+  //     setCourse(data);
+  //     setShowResults(true);
+  //   } catch (error) {
+  //     console.error("Erro ao buscar livro:", error);
+  //     setSearchResults([]);
+  //     setShowResults(false);
+  //   }
+  // };
+
+  const createEnrollment = async () => {
+
+    const formData = new FormData();
+    formData.append("rm", rm);
+    formData.append("cpf", cpf);
+    formData.append("birth", birth);
+    formData.append("coursesId", course);
+
+  }
 
   return (
     <form className='enrollment-div'>
@@ -32,9 +57,9 @@ const Matricula = () => {
       <div>
         <label className='input-group'>
           Curso:
-          <select name="course" required>
+          <select name="course" onChange={(e) => setCourse(e.target.value)} required>
             <option value="">Selecione um curso</option>
-            {courses.map(course => (
+            {course.map(course => (
               <option key={course.id} value={course.id}>{course.name}</option>
             ))}
           </select>

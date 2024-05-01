@@ -24,17 +24,17 @@ public class CourseController {
     @Autowired
     CourseService service;
 
-    @GetMapping("id/{id}")
+    @GetMapping("/id/{id}")
     public Optional<Course> findById(@PathVariable String id){
         return service.findById(id);
     }
 
-    @GetMapping("name/{name}")
+    @GetMapping("/name/{name}")
     public Optional<Course> findByName(@PathVariable String name){
         return service.findByName(name);
     }
 
-    @GetMapping("students/{id}")
+    @GetMapping("/students/{id}")
     public List<String> findAllStudentsRmById(@PathVariable String id){
         return service.findAllStudentsRmById(id);
     }
@@ -49,12 +49,12 @@ public class CourseController {
         return service.save(course);
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@RequestBody Course course, @PathVariable String id) {
         return service.update(course, id);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable String id){
             service.deleteById(id);
     }

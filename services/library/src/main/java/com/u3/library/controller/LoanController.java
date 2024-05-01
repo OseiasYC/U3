@@ -22,7 +22,7 @@ public class LoanController {
     LoanService loanService;
 
     @PostMapping("/save")
-    public Loan createBook(@RequestBody Loan loan) {
+    public Loan createLoan(@RequestBody Loan loan) {
         return loanService.createLoan(loan);
     }
 
@@ -41,9 +41,9 @@ public class LoanController {
         return loanService.getLoanById(id);
     }
 
-      @DeleteMapping("/{id}")
-      public void delete(@PathVariable Long id) {
-          loanService.deleteLoan(id);
-      }
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        loanService.deleteLoan(id);
+    }
 
-  }
+}
