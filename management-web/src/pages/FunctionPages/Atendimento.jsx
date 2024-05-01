@@ -11,6 +11,7 @@ const Atendimento = () => {
   const [sendingDate] = useState(new Date().toLocaleString());
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // caso tente clicar e enviar um atendimento, verá que os dados no banco salvo serão nulos, tem que corrigir isso.
   const createRequest = async (registrationNumber, serviceTitle, requestDescription, selectedFile) => {
 
     // TODO: o front n ta capturando os dados e passando para aqui, todos os atributos estão nulos
@@ -40,6 +41,7 @@ const Atendimento = () => {
     setSelectedFile(event.target.files[0]);
   };
 
+  // Apagar isso daqui quando tudo estiver funcionando
   const [services, setServices] = useState([
     { id: "1", title: "Solicitação de Trancamento de Matrícula" },
     { id: "2", title: "Emissão de Comprovante de Matrícula" },

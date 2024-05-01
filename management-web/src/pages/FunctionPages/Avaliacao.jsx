@@ -1,44 +1,72 @@
-import React, { useState } from 'react';
-import './Avaliacao.css';
+import React, { useState } from "react";
+import "./Avaliacao.css";
+import gradesFetch from "../../axios/Grades";
 
 const Avaliacao = () => {
-  const [enrollmentNumber, setEnrollmentNumber] = useState('');
+  const [enrollmentNumber, setEnrollmentNumber] = useState("");
   const [studentData, setStudentData] = useState(null);
+  const [studentSummary, setStudentSummary] = useState(null);
+  const [studentSubjectGrades, setStudentSubjectGrades] = useState(null);
 
-  // Dados simulados - TODO: Criar conexão com o db:
+  //TODO: Quase todo feito, ajeitar a busca de ids só
+  const searchGrades = async () => {
+    try {
+      const response1 = await gradesFetch.get(
+        `/grades/studentsummary/student/61}`
+      );
+      const data1 = response1.data;
+      setStudentSummary(data1);
+      console.log(data1);
+    } catch (error) {
+      console.error("Erro ao buscar o resumo do aluno", error);
+    }
+
+    try {
+      const response2 = await gradesFetch.get(
+        `/grades/studentsubjectgrades/student/61`
+      );
+      const data2 = response2.data;
+      setStudentSubjectGrades(data2);
+      console.log(data2);
+    } catch (error) {
+      console.error("Erro ao buscar o resumo por disciplina do aluno", error);
+    }
+  };
+
+  //Remover isso aqui futuramente
   const students = [
     {
-      enrollmentNumber: '123456',
-      name: 'John Doe',
-      course: 'Engenharia de Software',
+      enrollmentNumber: "123456",
+      name: "John Doe",
+      course: "Engenharia de Software",
       subjects: 2,
-      completedCourseHours: '80%',
+      completedCourseHours: "80%",
       globalAverage: 9.4,
-      courseStatus: 'Cursando',
-      courseShift: 'Matutino',
-      courseEntryDate: '01-01-2021',
+      courseStatus: "Cursando",
+      courseShift: "Matutino",
+      courseEntryDate: "01-01-2021",
       subjectsInformation: [
         {
-          subject: 'Tópicos Avançados em Banco de Dados',
-          situation: 'Cursando',
-          shift: 'Matutino',
-          totalWorkload: '60h',
-          grades1stAssessment: '9,5',
-          grades2ndAssessment: '',
+          subject: "Tópicos Avançados em Banco de Dados",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
+          grades1stAssessment: "9,5",
+          grades2ndAssessment: "",
           numberOfAbsences: 2,
-          dateEntry: '22-02-2024'
+          dateEntry: "22-02-2024",
         },
         {
-          subject: 'Compiladores',
-          situation: 'Cursando',
-          shift: 'Matutino',
-          totalWorkload: '60h',
-          grades1stAssessment: '7',
-          grades2ndAssessment: '',
+          subject: "Compiladores",
+          situation: "Cursando",
+          shift: "Matutino",
+          totalWorkload: "60h",
+          grades1stAssessment: "7",
+          grades2ndAssessment: "",
           numberOfAbsences: 1,
-          dateEntry: '23-02-2024'
-        }
-      ]
+          dateEntry: "23-02-2024",
+        },
+      ],
     },
   ];
 
@@ -49,7 +77,9 @@ const Avaliacao = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Search for student data based on enrollment number
-    const student = students.find(student => student.enrollmentNumber === enrollmentNumber);
+    const student = students.find(
+      (student) => student.enrollmentNumber === enrollmentNumber
+    );
     setStudentData(student);
   };
 
@@ -102,13 +132,11 @@ const Avaliacao = () => {
             id="enrollmentNumber"
             value={enrollmentNumber}
             onChange={handleEnrollmentNumberChange}
-            placeholder='Digite a matrícula do(a) estudante'
+            placeholder="Digite a matrícula do(a) estudante"
           />
         </div>
-        <div className="flex-container">
-          {renderStudentData()}
-        </div>
-        <button type="submit">Buscar</button>
+        <div className="flex-container">{renderStudentData()}</div>
+        <button type="submit" onClick={searchGrades}>Buscar</button>
       </form>
     </div>
   );
