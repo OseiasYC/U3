@@ -1,152 +1,106 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FaBookOpen } from "react-icons/fa";
-import libraryFetch from '../../axios/config';
-import './Biblioteca.css';
+import libraryFetch from "../../axios/LibraryFetch";
+import "./Biblioteca.css";
 
 const Biblioteca = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
-  const [formData, setFormData] = useState({
-    title: "",
-  });
-  const [studentRM, setStudentRM] = useState(""); // Adiciona o estado para o número de registro do estudante
-  const [typingTimeout, setTypingTimeout] = useState(null);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
 
   useEffect(() => {
-    if (typingTimeout) {
-      clearTimeout(typingTimeout);
-    }
-
-    if (searchTerm.trim() !== '') {
+    if (searchTerm.trim() !== "") {
       const timeoutId = setTimeout(() => {
         searchBook(searchTerm.trim());
       }, 1000);
 
-      setTypingTimeout(timeoutId);
-    } else {
-      setSearchResults([]);
+      return () => clearTimeout(timeoutId);
     }
-
-    return () => {
-      if (typingTimeout) {
-        clearTimeout(typingTimeout);
-      }
-    };
   }, [searchTerm]);
 
   const searchBook = async (title) => {
     try {
       const response = await libraryFetch.get(`/books/title/${title}`);
-      const data = response.data;
-      setSearchResults(data);
+      setSearchResults(response.data);
+      setShowResults(true);
     } catch (error) {
-      console.error('Erro ao buscar livro:', error);
+      console.error("Erro ao buscar livro:", error);
       setSearchResults([]);
+      setShowResults(false);
     }
   };
 
-  const handleSelectBook = (selectedBook) => {
-    setSelectedBook(selectedBook);
-    setFormData({
-      title: selectedBook.title // assuming you want to send only the title
-    });
+  const handleSelectBook = (book) => {
+    setSelectedBook(book);
+    setShowResults(false);
+    setConfirmationVisible(true);
+    console.log("Livro selecionado:", book);
   };
 
-  const handleLendBook = async () => {
+  const createLoan = async () => {
     try {
       if (!selectedBook) {
-        console.error('Nenhum livro selecionado para empréstimo');
+        console.error("Nenhum livro selecionado.");
         return;
       }
-
-      const loanData = {
-        book_id: selectedBook.id,
-        loan_date: new Date().toISOString(),
-        return_date: "", // O usuário fornecerá isso
-        loan_status: "BORROWED", // Pode ser "BORROWED" por padrão
-        student_rm: studentRM // Usa o valor de studentRM
-      };
-
-      const response = await fetch('http://localhost:8084/loans/save', {
-        method: 'POST',
-        body: JSON.stringify(loanData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+  
+      const currentDate = new Date();
+      const loanDate = currentDate.toISOString();
+  
+      const returnDate = new Date(currentDate);
+      returnDate.setDate(returnDate.getDate() + 7);
+      const formattedReturnDate = returnDate.toISOString();
+  
+      const response = await libraryFetch.post(`/loans/save`, {
+        studentRm: "20000001",
+        bookId: selectedBook.id,
+        loanStatus: "BORROWED",
+        loanDate: loanDate,
+        returnDate: formattedReturnDate,
       });
 
-      const json = await response.json();
-      console.log(response);
-      console.log(json);
+      console.log("Response from createLoan:", response);
+  
+      console.log("Empréstimo criado com sucesso!");
     } catch (error) {
-      console.error('Erro ao emprestar livro:', error);
-    }
-  };
-
-
-  const handleReturnBook = async () => {
-    try {
-      const returnData = {
-        book_id: selectedBook.id,
-        return_date: "", // O usuário fornecerá isso
-        loan_status: "RETURNED" // Define o status como "RETURNED" ao devolver
-      };
-
-      const response = await fetch(`http://localhost:8084/loans/update/${selectedBook.id}`, {
-        method: 'PUT',
-        body: JSON.stringify(returnData),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const json = await response.json();
-      console.log(response);
-      console.log(json);
-    } catch (error) {
-      console.error('Erro ao devolver livro:', error);
+      console.error("Erro ao criar empréstimo:", error);
     }
   };
 
   return (
-    <div className='library-div'>
+    <div className="library-div">
       <h1>Biblioteca</h1>
-      <div className='book-input'>
-        <FaBookOpen className='book-icon' />
+      <div className="book-input">
+        <FaBookOpen className="book-icon" />
         <input
           type="text"
-          list="book-list"
           placeholder="Pesquise por título do livro"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onSelect={(e) => {
-            const selectedTitle = e.target.value;
-            const selectedBook = searchResults.find(result => result.title === selectedTitle);
-            if (selectedBook) {
-              handleSelectBook(selectedBook);
-            }
-          }}
+          onFocus={() => setShowResults(true)}
         />
-        <datalist id="book-list">
-          {searchResults.map((result) => (
-            <option key={result.id} value={`${result.title}`} onClick={() => handleSelectBook(result)}><br />{`${result.author} - Disponível: ${result.amount}`}</option>
-          ))}
-        </datalist>
+        {showResults && (
+          <ul className="book-results">
+            {searchResults.map((book) => (
+              <li key={book.id} onClick={() => handleSelectBook(book)}>
+                <span>{book.title}</span>
+                <span>{book.author}</span>
+                <span>Disponível: {book.amount}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-      {/* Adiciona o campo de entrada para o número de registro do estudante */}
-      <div className='student-input'>
-        <FaBookOpen className='student-icon' />
-        <input
-          type="text"
-          placeholder="Número de registro do estudante"
-          value={studentRM}
-          onChange={(e) => setStudentRM(e.target.value)}
-          maxLength={9} // Limita o input a 9 caracteres
-        />
-      </div>
-      <button onClick={handleLendBook}>Emprestar</button>
-      <button onClick={handleReturnBook}>Devolver</button>
+      {confirmationVisible && selectedBook && (
+        <div className="confirmation">
+          <p>Confirme o empréstimo do livro:</p>
+          <p>Título: {selectedBook.title}</p>
+          <p>Autor: {selectedBook.author}</p>
+          <button onClick={createLoan}>Confirmar Empréstimo</button>
+        </div>
+      )}
     </div>
   );
 };

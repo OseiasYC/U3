@@ -104,3 +104,17 @@ p {
     background-color: #839CFF;
     color: white;
 }
+
+.confirmation {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .confirmation p {
+    margin-bottom: 10px;
+  }
+  
+  .confirmation button {
+    margin-top: 10px;
+  }
+  
