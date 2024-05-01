@@ -5,25 +5,27 @@ import "./Atendimento.css";
 import requestsFetch from "../../axios/RequestsFetch";
 
 const Atendimento = () => {
+  const [studentRm, setStudentRm] = useState("");
   const [serviceTitle, setServiceTitle] = useState("");
   const [requestDescription, setRequestDescription] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
-  const [sendingDate] = useState(new Date().toLocaleString());
+  const [showDate] = useState(new Date().toLocaleString());
+  const [sendingDate] = useState(new Date().toISOString());
   const [selectedFile, setSelectedFile] = useState(null);
 
   // caso tente clicar e enviar um atendimento, verá que os dados no banco salvo serão nulos, tem que corrigir isso.
-  const createRequest = async (registrationNumber, serviceTitle, requestDescription, selectedFile) => {
-
-    // TODO: o front n ta capturando os dados e passando para aqui, todos os atributos estão nulos
-    const formData = new FormData();
-    formData.append("studentRm", registrationNumber);
-    formData.append("title", serviceTitle);
-    formData.append("description", requestDescription);
-    formData.append("attachment", null);
-    formData.append("status", "OPEN");
+  const createRequest = async () => {
+    const requestBody = {
+      studentRm: registrationNumber,
+      title: serviceTitle,
+      description: requestDescription,
+      attachment: selectedFile,
+      requestDate: sendingDate,
+      status: "OPEN",
+    };
 
     try {
-      const response = await requestsFetch.post(`/request/create`, formData);
+      const response = await requestsFetch.post(`/request/create`, requestBody);
 
       console.log("Solicitação enviada com sucesso!", response.data);
 
@@ -36,17 +38,26 @@ const Atendimento = () => {
     }
   };
 
-  // Função para lidar com a seleção do arquivo
+  //FIXME Função para lidar com a seleção do arquivo
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1];
+        setSelectedFile(base64String);
+        console.log(base64String);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  // Apagar isso daqui quando tudo estiver funcionando
-  const [services, setServices] = useState([
+  // Algumas sugestões de Serviços
+  const [services] = useState([
     { id: "1", title: "Solicitação de Trancamento de Matrícula" },
     { id: "2", title: "Emissão de Comprovante de Matrícula" },
     { id: "3", title: "Solicitação de Agendamento de Orientação Acadêmica" },
-  ]); // Simulated data for search dropdown
+  ]);
 
   return (
     <div className="service-request-div">
@@ -57,9 +68,9 @@ const Atendimento = () => {
         <input
           type="text"
           list="service-list"
-          placeholder="Selecione o serviço"
           value={serviceTitle}
           onChange={(e) => setServiceTitle(e.target.value)}
+          placeholder="Selecione o serviço"
         />
         <datalist id="service-list">
           {services.map((service) => (
@@ -69,31 +80,28 @@ const Atendimento = () => {
       </div>
       <div className="input-group">
         <textarea
-          placeholder="Descreva a solicitação"
           value={requestDescription}
           onChange={(e) => setRequestDescription(e.target.value)}
+          placeholder="Descreva a solicitação"
           required
         />
       </div>
       <div className="input-group">
         <input
           type="text"
-          placeholder="Insira a matrícula do(a) estudante"
           value={registrationNumber}
           onChange={(e) => setRegistrationNumber(e.target.value)}
+          placeholder="Insira a matrícula do(a) estudante"
           required
         />
       </div>
       <div className="input-group">
         {/* TODO: Ajustar posição de ícones */}
         {/* <AiOutlineFileAdd className='icon' /> */}
-        <input
-          type="file"
-          onChange={(e) => setSelectedFile(e.target.files ? e.target.files[0] : null)}
-        />
+        <input type="file" onClick={handleFileChange} />
       </div>
       <div className="sending-date">
-        <label>Data da solicitação: {sendingDate}</label>
+        <label>Data da solicitação: {showDate}</label>
       </div>
       <button onClick={createRequest}>Enviar solicitação</button>
     </div>

@@ -54,7 +54,7 @@ const Biblioteca = () => {
       const formattedReturnDate = returnDate.toISOString();
   
       const response = await libraryFetch.post(`/loans/save`, {
-        studentRm: "20000001",
+        studentRm: "20000001", //TODO: tudo funcionando, só implementar um campo para o usuário digitar a matrícula dele e inserir nesse campo aqui
         bookId: selectedBook.id,
         loanStatus: "BORROWED",
         loanDate: loanDate,
@@ -68,40 +68,6 @@ const Biblioteca = () => {
       console.error("Erro ao criar empréstimo:", error);
     }
   };
-
-  const createLoan = async () => {
-    try {
-      if (!selectedBook) {
-        console.error("Nenhum livro selecionado.");
-        return;
-      }
-  
-      const currentDate = new Date();
-      const loanDate = currentDate.toISOString();
-  
-      const returnDate = new Date(currentDate);
-      returnDate.setDate(returnDate.getDate() + 7);
-      const formattedReturnDate = returnDate.toISOString();
-  
-      const response = await libraryFetch.post(`/loans/save`, {
-        studentRm: "20000001",
-        bookId: selectedBook.id,
-        loanStatus: "BORROWED",
-        loanDate: loanDate,
-        returnDate: formattedReturnDate,
-      });
-  
-      console.log("Empréstimo criado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao criar empréstimo:", error);
-    }
-  };
-  
-  const handleSelectBook = (selectedBook) => {
-    setSelectedBook(selectedBook);
-    setShowResults(false); // Esconde a lista de resultados após selecionar um livro
-  };
-  
 
   return (
     <div className="library-div">

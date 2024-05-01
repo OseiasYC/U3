@@ -17,10 +17,10 @@ import com.u3.library.services.BookService;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    
+
     @Autowired
     BookService bookService;
-    
+
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/save")
     public Book createBook(@RequestBody Book book) {
@@ -49,8 +49,8 @@ public class BookController {
         return bookService.getBookByTitle(title);
     }
 
-
     @DeleteMapping("/delete/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
     }
+}

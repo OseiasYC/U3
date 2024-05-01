@@ -1,42 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Matricula.css";
 import enrollmentFetch from "../../axios/EnrollmentFetch";
 import coursesFetch from "../../axios/CoursesFetch";
 
 const Matricula = () => {
-  const [course, setCourse] = useState([]);
-  const [rm, setRm] = useState(null);
-  const [name, setName] = useState(null);
-  const [cpf, setCpf] = useState(null);
-  const [birth, setBirth] = useState(null);
+  const [courses, setCourse] = useState([]);
+  const [selectedCourseId, setSelectedCourseId] = useState("");
+  const [name, setName] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [birth, setBirth] = useState("");
 
-  const searchCourses = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await coursesFetch.get(`/course/all`);
+        const data = response.data;
+        console.log(response.data);
+        setCourse(data);
+      } catch (error) {
+        console.error("Erro ao buscar os cursos", error);
+      }
+    };
+
+    const delay = setTimeout(() => {
+      fetchData();
+    }, 1000);
+
+    return () => clearTimeout(delay);
+  }, []);
+
+  const createEnrollment = async () => {
+    const username = generateUsername(name);
+    const randomRM = generateRandomRM();
+
+    const requestBody = {
+      rm: randomRM,
+      name: name,
+      username: username,
+      cpf: cpf,
+      birth: birth,
+      coursesId: [selectedCourseId],
+    };
+
     try {
-      const response = await coursesFetch.get(`/course/all`);
-      const data = response.data;
-      setCourse(data);
-      console.log(data);
-    } catch (error) {
-      console.error("Erro ao buscar os cursos", error);
-    }
-  };
+      const response = await enrollmentFetch.post(`/student/add`, requestBody);
 
-  // TODO: passar os parâmetros aqui dos dados recebidos pelos campos digitados (inserindo dados manuais consegui testar, tudo ok na conexão aqui)
-  const createEnrollment = async (course) => {
-    const username = generateUsername("Iago Roque");
-    console.log(course);
-
-    const formData = new FormData();
-    formData.append("rm", rm);
-    formData.append("name", name);
-    formData.append("username", username);
-    formData.append("cpf", cpf);
-    formData.append("birth", birth);
-    formData.append("coursesId", null); // Ta rolando algum problema com courses, eu preciso pegar o id dele e não consigo, resolver também
-
-    try {
-      const response = await enrollmentFetch.post(`/student/add`, formData);
-
+      alert(`Matrícula efetuada com sucesso! RM do estudante: ${randomRM}`); //TODO: fazer esse alert funcionar
       console.log("Solicitação enviada com sucesso!", response.data);
     } catch (error) {
       console.error(error);
@@ -58,6 +67,12 @@ const Matricula = () => {
     return username;
   }
 
+  function generateRandomRM() {
+    const randomNumber = Math.floor(Math.random() * 100000);
+    const formattedRM = `2000${randomNumber.toString().padStart(5, "0")}`;
+    return formattedRM;
+  }
+
   return (
     <form className="enrollment-div">
       <h1>Matrícula</h1>
@@ -66,7 +81,8 @@ const Matricula = () => {
           Nome completo:
           <input
             type="text"
-            name="fullName"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Digite o nome completo"
             required
           />
@@ -75,13 +91,24 @@ const Matricula = () => {
       <div>
         <label className="input-group">
           CPF:
-          <input type="text" name="cpf" placeholder="Digite o CPF" required />
+          <input
+            type="text"
+            value={cpf}
+            onChange={(e) => setCpf(e.target.value)}
+            placeholder="Digite o CPF"
+            required
+          />
         </label>
       </div>
       <div>
         <label className="input-group">
           Data de nascimento:
-          <input type="date" name="birth" required />
+          <input
+            type="date"
+            value={birth}
+            onChange={(e) => setBirth(e.target.value)}
+            required
+          />
         </label>
       </div>
       <div>
@@ -89,11 +116,12 @@ const Matricula = () => {
           Curso:
           <select
             name="course"
-            onChange={(e) => setCourse(e.target.value)}
+            value={selectedCourseId}
+            onChange={(e) => setSelectedCourseId(e.target.value)}
             required
           >
             <option value="">Selecione um curso</option>
-            {course.map((course) => ( // Talvez tenha que rever isso também
+            {courses.map((course) => (
               <option key={course.id} value={course.id}>
                 {course.name}
               </option>

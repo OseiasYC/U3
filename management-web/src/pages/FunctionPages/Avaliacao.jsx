@@ -8,26 +8,25 @@ const Avaliacao = () => {
   const [studentSummary, setStudentSummary] = useState(null);
   const [studentSubjectGrades, setStudentSubjectGrades] = useState(null);
 
-  //TODO: Quase todo feito, ajeitar a busca de ids só
   const searchGrades = async () => {
     try {
       const response1 = await gradesFetch.get(
-        `/grades/studentsummary/student/61}`
+        `/grades/studentsummary/student/${enrollmentNumber}`
       );
       const data1 = response1.data;
       setStudentSummary(data1);
-      console.log(data1);
+      console.log(studentSummary);
     } catch (error) {
       console.error("Erro ao buscar o resumo do aluno", error);
     }
 
     try {
       const response2 = await gradesFetch.get(
-        `/grades/studentsubjectgrades/student/61`
+        `/grades/studentsubjectgrades/studentsummary/student/${enrollmentNumber}`
       );
       const data2 = response2.data;
       setStudentSubjectGrades(data2);
-      console.log(data2);
+      console.log(studentSubjectGrades);
     } catch (error) {
       console.error("Erro ao buscar o resumo por disciplina do aluno", error);
     }
@@ -72,6 +71,7 @@ const Avaliacao = () => {
 
   const handleEnrollmentNumberChange = (event) => {
     setEnrollmentNumber(event.target.value);
+    console.log(enrollmentNumber);
   };
 
   const handleSubmit = (event) => {
@@ -136,7 +136,9 @@ const Avaliacao = () => {
           />
         </div>
         <div className="flex-container">{renderStudentData()}</div>
-        <button type="submit" onClick={searchGrades}>Buscar</button>
+        <button type="submit" onClick={searchGrades}>
+          Buscar
+        </button>
       </form>
     </div>
   );
