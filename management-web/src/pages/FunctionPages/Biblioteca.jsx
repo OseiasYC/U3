@@ -1,139 +1,108 @@
-import React, { useState } from 'react';
-import { FaBookOpen } from "react-icons/fa6";
-import { PiStudent } from "react-icons/pi";
-import './Biblioteca.css';
+import React, { useState, useEffect } from "react";
+import { FaBookOpen } from "react-icons/fa";
+import libraryFetch from "../../axios/LibraryFetch";
+import "./Biblioteca.css";
 
 const Biblioteca = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [books, setBooks] = useState([
-    { id: '1', title: 'Engenharia de Software', author: 'Ian Sommerville', quantity: 5 },
-    { id: '2', title: 'Rapid Development', author: 'Steve McConnell', quantity: 3 },
-    { id: '3', title: 'Requirements Engineering: A Good Practice Guide', author: 'Ian Sommerville', quantity: 4 },
-  ]); // Dados simulados. TODO: buscar do db
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
 
-  const [students, setStudents] = useState([
-    { registration: 'R1', fullName: 'Student 1' },
-    { registration: '200017414', fullName: 'Lucas Farias da Silva' },
-    { registration: 'R3', fullName: 'Student 3' },
-  ]); // Dados simulados. TODO: buscar do db
+  useEffect(() => {
+    if (searchTerm.trim() !== "") {
+      const timeoutId = setTimeout(() => {
+        searchBook(searchTerm.trim());
+      }, 1000);
 
-  const [selectedBookTitle, setSelectedBookTitle] = useState('');
-  const [selectedBookAuthor, setSelectedBookAuthor] = useState('');
-  const [studentRegistration, setStudentRegistration] = useState('');
-  const [selectedStudentFullName, setSelectedStudentFullName] = useState('');
-
-  const searchBook = (term) => {
-    const foundBook = books.find(book =>
-      book.id === term ||
-      book.title.toLowerCase().includes(term.toLowerCase()) ||
-      book.author.toLowerCase().includes(term.toLowerCase())
-    );
-    if (foundBook) {
-      setSelectedBookTitle(foundBook.title);
-      setSelectedBookAuthor(foundBook.author);
-    } ;
-  };
-
-  const searchStudent = (registration) => {
-    const foundStudent = students.find(student => student.registration === registration);
-    if (foundStudent) {
-      setSelectedStudentFullName(foundStudent.fullName);
-      setStudentRegistration(foundStudent.registration);
-    } 
-  };
-
-  const handleLendBook = () => {
-    // TODO: Adicionar lógica de empréstimo relacionando ao db
-    const updatedBooks = books.map(book => {
-      if (book.title === selectedBookTitle && book.quantity > 0) {
-        return { ...book, quantity: book.quantity - 1 };
-      }
-      return book;
-    });
-    setBooks(updatedBooks);
-
-    alert(`Emprestando o livro "${selectedBookTitle}" para o(a) estudante: ${selectedStudentFullName}`);
-  };
-
-  const handleReturnBook = () => {
-    // Verifica se o livro e o estudante selecionados são válidos
-    if (!selectedBookTitle || !selectedStudentFullName) {
-      alert("Por favor, selecione um livro e um estudante antes de devolver.");
-      return;
+      return () => clearTimeout(timeoutId);
     }
-  
-    // Encontra o livro a ser devolvido
-    const returnedBook = books.find(book => book.title === selectedBookTitle);
-    
-    // Atualiza a quantidade do livro devolvido
-    const updatedBooks = books.map(book => {
-      if (book.title === selectedBookTitle) {
-        return { ...book, quantity: book.quantity + 1 };
+  }, [searchTerm]);
+
+  const searchBook = async (title) => {
+    try {
+      const response = await libraryFetch.get(`/books/title/${title}`);
+      setSearchResults(response.data);
+      setShowResults(true);
+    } catch (error) {
+      console.error("Erro ao buscar livro:", error);
+      setSearchResults([]);
+      setShowResults(false);
+    }
+  };
+
+  const handleSelectBook = (book) => {
+    setSelectedBook(book);
+    setShowResults(false);
+    setConfirmationVisible(true);
+    console.log("Livro selecionado:", book);
+  };
+
+  const createLoan = async () => {
+    try {
+      if (!selectedBook) {
+        console.error("Nenhum livro selecionado.");
+        return;
       }
-      return book;
-    });
   
-    // Atualiza o estado dos livros
-    setBooks(updatedBooks);
+      const currentDate = new Date();
+      const loanDate = currentDate.toISOString();
   
-    // Limpa os estados dos livros e estudantes selecionados
-    setSelectedBookTitle('');
-    setSelectedBookAuthor('');
-    setSelectedStudentFullName('');
-    setStudentRegistration('');
+      const returnDate = new Date(currentDate);
+      returnDate.setDate(returnDate.getDate() + 7);
+      const formattedReturnDate = returnDate.toISOString();
   
-    // Alerta que o livro foi devolvido com sucesso
-    alert(`Livro "${returnedBook.title}" devolvido com sucesso.`);
+      const response = await libraryFetch.post(`/loans/save`, {
+        studentRm: "20000001", //TODO: tudo funcionando, só implementar um campo para o usuário digitar a matrícula dele e inserir nesse campo aqui
+        bookId: selectedBook.id,
+        loanStatus: "BORROWED",
+        loanDate: loanDate,
+        returnDate: formattedReturnDate,
+      });
+
+      console.log("Response from createLoan:", response);
+  
+      console.log("Empréstimo criado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao criar empréstimo:", error);
+    }
   };
 
   return (
-    <div className='library-div'>
+    <div className="library-div">
       <h1>Biblioteca</h1>
-      <div className='book-input'>
-        <FaBookOpen className='book-icon' />
+      <div className="book-input">
+        <FaBookOpen className="book-icon" />
         <input
           type="text"
-          list="book-list"
-          placeholder="Pesquise por título, autor ou ISBN"
+          placeholder="Pesquise por título do livro"
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            searchBook(e.target.value);
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onFocus={() => setShowResults(true)}
         />
-        <datalist id="book-list">
-          {books
-            .filter(book =>
-              book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              book.id.includes(searchTerm)
-            )
-            .map((book) => (
-              <option key={book.id} value={book.title}>{`${book.author} - (Disponível: ${book.quantity})`}</option>
+        {showResults && (
+          <ul className="book-results">
+            {searchResults.map((book) => (
+              <li key={book.id} onClick={() => handleSelectBook(book)}>
+                <span>{book.title}</span>
+                <span>{book.author}</span>
+                <span>Disponível: {book.amount}</span>
+              </li>
             ))}
-        </datalist>
+          </ul>
+        )}
       </div>
-      <div className='student-input'>
-        <PiStudent className='student-icon' />
-        <input
-          type="text"
-          placeholder="Insira a matrícula do(a) estudante"
-          value={studentRegistration}
-          onChange={(e) => {
-            setStudentRegistration(e.target.value);
-            searchStudent(e.target.value);
-          }}
-        />
-      </div>
-      <p>Confira a relação do empréstimo:</p>
-      <p className='p-answer'>
-        Estudante: {selectedStudentFullName} - {studentRegistration} <br />
-        Livro: {selectedBookTitle} - {selectedBookAuthor}
-      </p>
-      <button onClick={handleLendBook}>Emprestar</button>
-      <button onClick={handleReturnBook}>Devolver</button>
+      {confirmationVisible && selectedBook && (
+        <div className="confirmation">
+          <p>Confirme o empréstimo do livro:</p>
+          <p>Título: {selectedBook.title}</p>
+          <p>Autor: {selectedBook.author}</p>
+          <button onClick={createLoan}>Confirmar Empréstimo</button>
+        </div>
+      )}
     </div>
   );
-}
+};
 
 export default Biblioteca;

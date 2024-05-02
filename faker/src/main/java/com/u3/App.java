@@ -47,8 +47,8 @@ public class App {
             RequestDbConnection.getConnection());
 
     public static void main(String[] args) {
-        CourseDbConnection.getConnection();
-        createCourseBatch();
+        // CourseDbConnection.getConnection();
+        // createCourseBatch();
         // EnrollmentDbConnection.getConnection();
         // createEnrollmentBatch();
         // GradesDbConnection.getConnection();
@@ -137,7 +137,7 @@ public class App {
     }
 
     public static void createLibraryBatch() {
-        String[] loanStatuses = { "BORROWED", "RETURNED", "OVERDUE", "LOST" };
+        String[] loanStatuses = { "BORROWED", "OVERDUE", "LOST" };
 
         try {
             for (int i = 0; i < libraryQuantity; i++) {

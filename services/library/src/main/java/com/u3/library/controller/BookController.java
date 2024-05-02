@@ -2,6 +2,7 @@ package com.u3.library.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +21,13 @@ public class BookController {
     @Autowired
     BookService bookService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/save")
     public Book createBook(@RequestBody Book book) {
         return bookService.createBook(book);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/update/{id}")
     public Book updateBook(@PathVariable Long id, @RequestBody Book updateBook) {
         return bookService.updateBook(id, updateBook);
@@ -35,9 +38,15 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{id}")
     public Book getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
+    }
+
+    @GetMapping("/title/{title}")
+    public List<Book> getBookByTitle(@PathVariable String title) {
+        return bookService.getBookByTitle(title);
     }
 
     @DeleteMapping("/delete/{id}")

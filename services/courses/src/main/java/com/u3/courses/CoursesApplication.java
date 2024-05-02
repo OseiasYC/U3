@@ -8,7 +8,6 @@ public class CoursesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoursesApplication.class, args);
-
 		System.out.println("\u001B[32m" + "Course service on: 8081." + "\u001B[0m");
 	}
 

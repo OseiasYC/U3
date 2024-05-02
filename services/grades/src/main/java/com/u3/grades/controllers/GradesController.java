@@ -29,6 +29,12 @@ public class GradesController {
     @Autowired
     StudentSubjectGradesService studentSubjectGradesService;
 
+    @GetMapping("/studentsubjectgrades/studentsummary/student/{studentRm}")
+    public ResponseEntity<List<StudentSubjectGrades>> getStudentSubjectGradesBySSSRm(@PathVariable String studentRm) {
+        Long i = studentSummaryService.getStudentSummaryByStudentRm(studentRm).getId();
+        return ResponseEntity.ok(studentSubjectGradesService.getStudentSubjectGradesByStudentSummary(studentSummaryService.getStudentSummary(i)));
+    }
+
     @GetMapping("/studentsummary/{studentSummaryId}")
     public ResponseEntity<StudentSummary> getStudentSummary(@PathVariable Long studentSummaryId) {
         return ResponseEntity.ok(studentSummaryService.getStudentSummary(studentSummaryId));

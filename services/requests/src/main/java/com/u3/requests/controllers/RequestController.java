@@ -1,6 +1,8 @@
 package com.u3.requests.controllers;
 
+import java.util.Base64;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,9 +50,21 @@ public class RequestController {
     @PostMapping("/create")
     public ResponseEntity<String> createRequest(@RequestBody Request request,
             UriComponentsBuilder uriComponentsBuilder) {
-        requestService.createRequest(request);
-        var uri = uriComponentsBuilder.path("/request/{id}").buildAndExpand(request.getId()).toUri();
-        return ResponseEntity.created(uri).body("Request created successfully");
+        try {
+            // Convertendo a string Base64 do attachment para byte[]
+            if (request.getAttachment() != null) {
+                byte[] attachmentBytes = Base64.getDecoder().decode(request.getAttachment());
+                request.setAttachment(attachmentBytes);
+            }
+
+            request.setRequestDate(LocalDateTime.now());
+            requestService.createRequest(request);
+
+            var uri = uriComponentsBuilder.path("/request/{id}").buildAndExpand(request.getId()).toUri();
+            return ResponseEntity.created(uri).body("Request created successfully");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Invalid Base64 encoding for attachment");
+        }
     }
 
     @PutMapping("/update/{requestId}")
