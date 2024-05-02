@@ -12,19 +12,42 @@
     position: relative;
 }
 
-.book-input, .student-input {
+.book-input {
     display: flex;
     align-items: center;
     position: relative;
     margin-bottom: 10px;
 }
 
-.book-icon, .student-icon {
-    position: relative;
+.book-icon {
     font-size: 55px;
     padding-right: 10px;
 }
 
+.book-results {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 25px;
+    width: calc(100% - 80px);
+    max-height: 150px; 
+    overflow-y: auto;
+    background: rgba(255,255,255,0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    z-index: 999;
+    padding: 5px 0;
+    margin-left: 8px;
+    color: #839CFF;
+}
+
+.book-results li {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.book-results li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
 
 .library-div label {
     display: block;
@@ -39,7 +62,7 @@
     backdrop-filter: blur(30px);
     box-shadow: 0 0 10px rgba(0, 0, 0, .2);
     padding: 10px;
-    width: calc(100% - 15px);
+    width: calc(100% - 80px);
     background-color: white;
     box-sizing: border-box; 
 }
@@ -63,7 +86,6 @@ p {
     padding-bottom: 10px;
     color: #FFE994;
 }
-
 
 .library-div select {
     width: calc(100% - 20px);
@@ -108,13 +130,25 @@ p {
 .confirmation {
     margin-top: 20px;
     text-align: left;
-  }
-  
-  .confirmation p {
+}
+
+.confirmation p {
     margin-bottom: 10px;
-  }
-  
-  .confirmation button {
+}
+
+.confirmation button {
     margin-top: 10px;
-  }
-  
+}
+
+.confirmation-advise {
+    color: #FFE994;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.confirmation-title,
+.confirmation-author {
+    font-weight: normal;
+}
