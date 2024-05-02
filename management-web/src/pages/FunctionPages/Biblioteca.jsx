@@ -85,9 +85,10 @@ const Biblioteca = () => {
           <ul className="book-results">
             {searchResults.map((book) => (
               <li key={book.id} onClick={() => handleSelectBook(book)}>
-                <span>{book.title}</span>
-                <span>{book.author}</span>
-                <span>Disponível: {book.amount}</span>
+                <span className="title"><b>{book.title}</b></span>
+                <br />
+                <span className="author">{book.author}</span>
+                <span className="amount"> - Disponível: {book.amount}</span>
               </li>
             ))}
           </ul>
@@ -95,9 +96,9 @@ const Biblioteca = () => {
       </div>
       {confirmationVisible && selectedBook && (
         <div className="confirmation">
-          <p>Confirme o empréstimo do livro:</p>
-          <p>Título: {selectedBook.title}</p>
-          <p>Autor: {selectedBook.author}</p>
+          <p className="confirmation-advise">Confirme o empréstimo do livro:</p>
+          <p className="confirmation-title"><b>Título:</b> {selectedBook.title}</p>
+          <p className="confirmation-author"><b>Autor(a):</b> {selectedBook.author}</p>
           <button onClick={createLoan}>Confirmar Empréstimo</button>
         </div>
       )}
