@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBookOpen } from "react-icons/fa";
+import { FaBookOpen, FaUserGraduate  } from "react-icons/fa";
 import libraryFetch from "../../axios/LibraryFetch";
 import "./Biblioteca.css";
 
@@ -9,6 +9,7 @@ const Biblioteca = () => {
   const [showResults, setShowResults] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [studentRm, setStudentRm] = useState(""); // Novo estado para armazenar a matrícula do aluno
 
   useEffect(() => {
     if (searchTerm.trim() !== "") {
@@ -45,6 +46,11 @@ const Biblioteca = () => {
         console.error("Nenhum livro selecionado.");
         return;
       }
+
+      if (!studentRm) {
+        console.error("Por favor, digite a matrícula do(a) estudante.");
+        return;
+      }
   
       const currentDate = new Date();
       const loanDate = currentDate.toISOString();
@@ -54,7 +60,7 @@ const Biblioteca = () => {
       const formattedReturnDate = returnDate.toISOString();
   
       const response = await libraryFetch.post(`/loans/save`, {
-        studentRm: "20000001", //TODO: tudo funcionando, só implementar um campo para o usuário digitar a matrícula dele e inserir nesse campo aqui
+        studentRm: studentRm, // Usando o valor do estado studentRm
         bookId: selectedBook.id,
         loanStatus: "BORROWED",
         loanDate: loanDate,
@@ -93,6 +99,15 @@ const Biblioteca = () => {
             ))}
           </ul>
         )}
+      </div>
+      <div className="student-input">
+        <FaUserGraduate className="student-icon" />
+        <input
+          type="text"
+          placeholder="Digite a matrícula do(a) estudante"
+          value={studentRm}
+          onChange={(e) => setStudentRm(e.target.value)}
+        />
       </div>
       {confirmationVisible && selectedBook && (
         <div className="confirmation">
